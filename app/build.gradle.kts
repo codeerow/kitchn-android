@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.googleServices)
+    alias(libs.plugins.firebase.perf)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -67,4 +70,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.bundles.network)
+    implementation(libs.bundles.ui)
+    implementation(libs.bundles.di)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.bundles.firebase)
+    implementation(libs.bundles.navigation)
 }
