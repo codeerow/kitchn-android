@@ -1,6 +1,6 @@
 [versions]
 agp = "8.3.2"
-kotlin = "1.9.22"
+kotlin = "1.9.0"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -20,9 +20,13 @@ firebase-pref = "1.4.2"
 firebase-crashlytics = "2.9.9"
 google-services = "4.4.1"
 kotlinx-immutable-collections = "0.3.6"
+onetapcompose = "1.0.0"
+play-services-auth-version = "21.0.0"
+securityCrypto = "1.1.0-alpha06"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -66,6 +70,10 @@ firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-installations-ktx = { module = "com.google.firebase:firebase-installations" }
 firebase-perf-ktx = { module = "com.google.firebase:firebase-perf" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
+
+one-tap-auth-compose = { module = "com.github.stevdza-san:OneTapCompose", version.ref = "onetapcompose" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth-version" }
 
 
 [plugins]
@@ -78,7 +86,7 @@ googleServices = { id = "com.google.gms.google-services", version.ref = "google-
 [bundles]
 ui = ["compose-ui-tooling", "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "compose-ui", "compose-graphics", "compose-preview", "compose-material", "coil-compose", "compose-icons", "kotlinx-immutable-collections"]
 navigation = ["compose-navigation"]
-firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx", "firebase-installations-ktx", "firebase-perf-ktx"]
+firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx", "firebase-installations-ktx", "firebase-perf-ktx", "firebase-auth"]
 di = ["koin-android", "koin-core", "koin-compose", "koin-compose-navigation"]
 network = ["ktor-client-core", "ktor-client-android", "ktor-client-serialization", "ktor-client-serialization-json", "ktor-client-logging-jvm", "ktor-client-content-negotiation", "ktor-client-auth", "kotlinx-serialization-json"]
 

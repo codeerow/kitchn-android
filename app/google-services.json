@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "626380666438",
+    "project_id": "kitchn-af951",
+    "storage_bucket": "kitchn-af951.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:626380666438:android:4344692b31db11c3457c47",
+        "android_client_info": {
+          "package_name": "com.spirit.kitchn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "626380666438-sl2e06tpa95g68urc8m48r60d8qsgf5e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spirit.kitchn",
+            "certificate_hash": "6654796b688a8ac6d4b768a76da28cfdf9c1754a"
+          }
+        },
+        {
+          "client_id": "626380666438-dvvc5s04974s8vv2qusdrnf6mg2anvgo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5h8K75wg7E7hsMOnuO_d-QAlWJqb0yOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "626380666438-dvvc5s04974s8vv2qusdrnf6mg2anvgo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

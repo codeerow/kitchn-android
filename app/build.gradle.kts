@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.googleServices)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.firebase.crashlytics)
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -21,6 +22,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "BASE_URL", "\"localhost:3000\"")
     }
 
     buildTypes {
@@ -76,4 +79,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)
     implementation(libs.bundles.navigation)
+    implementation(libs.play.services.auth)
+    implementation(libs.one.tap.auth.compose)
+    implementation(libs.androidx.security.crypto)
 }
