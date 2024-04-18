@@ -1,4 +1,4 @@
-package com.spirit.kitchn.core.user.model
+package com.spirit.kitchn.core.user.product.model
 
 import kotlinx.serialization.Serializable
 

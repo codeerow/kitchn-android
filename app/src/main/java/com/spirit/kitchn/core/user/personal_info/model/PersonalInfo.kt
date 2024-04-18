@@ -1,9 +1,9 @@
-package com.spirit.kitchn.core.user.model
+package com.spirit.kitchn.core.user.personal_info.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserState(
+data class PersonalInfo(
     val id: String,
     val email: String,
     val username: String,

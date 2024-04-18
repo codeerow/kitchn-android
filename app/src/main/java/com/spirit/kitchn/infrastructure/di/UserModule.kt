@@ -3,11 +3,11 @@ package com.spirit.kitchn.infrastructure.di
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import com.spirit.kitchn.core.user.AddProductUseCase
-import com.spirit.kitchn.core.user.DeleteProductUseCase
-import com.spirit.kitchn.core.user.GetMyProductsUseCase
-import com.spirit.kitchn.core.user.GetUserInfoUseCase
-import com.spirit.kitchn.core.user.datasource.ProductDataSource
+import com.spirit.kitchn.core.user.product.AddProductUseCase
+import com.spirit.kitchn.core.user.product.DeleteProductUseCase
+import com.spirit.kitchn.core.user.product.GetMyProductsUseCase
+import com.spirit.kitchn.core.user.personal_info.GetUserInfoUseCase
+import com.spirit.kitchn.core.user.product.datasource.ProductDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel

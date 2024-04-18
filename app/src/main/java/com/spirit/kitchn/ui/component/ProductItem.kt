@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.spirit.kitchn.core.user.model.Product
+import com.spirit.kitchn.core.user.product.model.Product
 import com.spirit.kitchn.ui.theme.KTheme
 
 @Composable

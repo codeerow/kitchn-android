@@ -13,7 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.spirit.kitchn.core.user.AddProductUseCase
+import com.spirit.kitchn.core.user.product.AddProductUseCase
 import com.spirit.kitchn.infrastructure.navigation.screenFadeIn
 import com.spirit.kitchn.infrastructure.navigation.screenFadeOut
 import com.spirit.kitchn.infrastructure.navigation.screenSlideIn

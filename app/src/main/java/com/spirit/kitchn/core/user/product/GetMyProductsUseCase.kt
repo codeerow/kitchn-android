@@ -1,7 +1,7 @@
-package com.spirit.kitchn.core.user
+package com.spirit.kitchn.core.user.product
 
-import com.spirit.kitchn.core.user.datasource.ProductDataSource
-import com.spirit.kitchn.core.user.model.Product
+import com.spirit.kitchn.core.user.product.datasource.ProductDataSource
+import com.spirit.kitchn.core.user.product.model.Product
 import kotlinx.coroutines.flow.Flow
 
 class GetMyProductsUseCase(

@@ -1,6 +1,6 @@
-package com.spirit.kitchn.core.user.datasource
+package com.spirit.kitchn.core.user.product.datasource
 
-import com.spirit.kitchn.core.user.model.Product
+import com.spirit.kitchn.core.user.product.model.Product
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
