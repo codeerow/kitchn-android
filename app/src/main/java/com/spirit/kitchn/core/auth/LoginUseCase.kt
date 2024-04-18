@@ -27,8 +27,8 @@ class LoginUseCase(
 
 
     @Serializable
-    data class LoginRequestBody(val email: String, val password: String)
+    private data class LoginRequestBody(val email: String, val password: String)
 
     @Serializable
-    data class LoginResponseBody(val accessToken: String)
+    private data class LoginResponseBody(val accessToken: String)
 }

@@ -22,6 +22,7 @@ google-services = "4.4.1"
 kotlinx-immutable-collections = "0.3.6"
 onetapcompose = "1.0.0"
 play-services-auth-version = "21.0.0"
+playServicesCodeScanner = "16.1.0"
 securityCrypto = "1.1.0-alpha06"
 
 [libraries]
@@ -74,6 +75,7 @@ firebase-auth = { module = "com.google.firebase:firebase-auth" }
 
 one-tap-auth-compose = { module = "com.github.stevdza-san:OneTapCompose", version.ref = "onetapcompose" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth-version" }
+play-services-code-scanner = { module = "com.google.android.gms:play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 
 
 [plugins]

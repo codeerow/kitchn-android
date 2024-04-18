@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.screen.welcome
+package com.spirit.kitchn.ui.screen.add_product
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,37 +21,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.KButton
 import com.spirit.kitchn.ui.theme.KTheme
-import com.stevdzasan.onetap.rememberOneTapSignInState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WelcomeScreen(
-    isPreview: Boolean = false,
-    email: String,
-    password: String,
-    onEmailChanged: (String) -> Unit,
-    onPasswordChanged: (String) -> Unit,
-    onLoginClicked: () -> Unit,
+fun AddProductScreen(
+    onAddProductClicked: () -> Unit,
+    name: String,
+    onNameChanged: (String) -> Unit,
 ) {
-//    val state = rememberOneTapSignInState()
-//
-//    if (!isPreview) {
-//        OneTapSignInWithGoogle(
-//            state = state,
-//            clientId = "998789658191-tk4052teeaesflsjpin2mgn1m372gdtg.apps.googleusercontent.com",
-//            onTokenIdReceived = { tokenId ->
-//                Log.d("LOG", tokenId)
-//            },
-//            onDialogDismissed = { message ->
-//                Log.d("LOG", message)
-//            }
-//        )
-//    }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text("Welcome to Kitchn") })
+            TopAppBar(title = { Text("Product not found") })
         }
     ) { padding ->
         Column(
@@ -61,43 +42,26 @@ fun WelcomeScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             Spacer(modifier = Modifier.weight(1f))
-            EmailField(value = email, onValueChanged = onEmailChanged)
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PasswordField(value = password, onValueChanged = onPasswordChanged)
+            NameField(value = name, onValueChanged = onNameChanged)
             Spacer(modifier = Modifier.height(48.dp))
 
             KButton(
-                onClick = onLoginClicked,
+                onClick = onAddProductClicked,
                 modifier = Modifier
-                    .testTag("buttonLogin")
+                    .testTag("buttonAddProduct")
                     .padding(horizontal = 24.dp)
                     .fillMaxWidth(),
-                label = "Login"
+                label = "Add Product"
             )
             Spacer(modifier = Modifier.height(26.dp))
         }
     }
 }
 
-@Composable
-private fun EmailField(value: String, onValueChanged: (String) -> Unit) {
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        value = value,
-        onValueChange = onValueChanged,
-        label = {
-            Text("Email")
-        }
-    )
-}
 
 @Composable
-private fun PasswordField(value: String, onValueChanged: (String) -> Unit) {
+private fun NameField(value: String, onValueChanged: (String) -> Unit) {
     TextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -105,22 +69,19 @@ private fun PasswordField(value: String, onValueChanged: (String) -> Unit) {
         value = value,
         onValueChange = onValueChanged,
         label = {
-            Text("Password")
+            Text("Name")
         }
     )
 }
 
 @Preview
 @Composable
-private fun WelcomeScreenPreview() {
+private fun AddProductScreenPreview() {
     KTheme {
-        WelcomeScreen(
-            isPreview = true,
-            email = "",
-            password = "",
-            onEmailChanged = {},
-            onPasswordChanged = {},
-            onLoginClicked = {},
+        AddProductScreen(
+            name = "",
+            onNameChanged = {},
+            onAddProductClicked = {},
         )
     }
 }
