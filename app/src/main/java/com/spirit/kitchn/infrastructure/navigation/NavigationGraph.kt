@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.spirit.kitchn.core.user.product.AddProductUseCase
+import com.spirit.kitchn.ui.component.PhotoItem
 import com.spirit.kitchn.ui.screen.add_product.AddProductScreen
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
 import com.spirit.kitchn.ui.screen.home.HomeScreen
@@ -77,13 +78,22 @@ internal fun NavigationGraph() {
             val barcodeArg = backStackEntry.arguments?.getString(BARCODE_ARG) ?: ""
             val viewModel: AddProductViewModel = koinNavViewModel { parametersOf(barcodeArg) }
             val name by viewModel.name.collectAsState()
+            val photos by viewModel.photos.collectAsState()
 
             AddProductScreen(
                 onAddProductClicked = viewModel::onAddProductClicked,
                 onNameChanged = viewModel.name::tryEmit,
                 name = name,
-                onAddAssetClicked = {  },
-                onDeleteAssetClicked = { },
+                onAddAsset = {
+                    viewModel.photos.tryEmit(
+                        viewModel.photos.value.toMutableList() + PhotoItem.Photo(
+                            (0..Int.MAX_VALUE).random(),
+                            it.toString(),
+                        )
+                    )
+                },
+                onDeleteAsset = { },
+                photos = photos,
             )
         }
 

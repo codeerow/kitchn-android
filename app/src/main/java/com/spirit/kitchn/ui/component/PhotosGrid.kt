@@ -1,6 +1,7 @@
 package com.spirit.kitchn.ui.component
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.onLongClick
@@ -53,19 +55,30 @@ import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.toIntRect
 import coil.compose.rememberAsyncImagePainter
 import com.spirit.kitchn.ui.theme.KTheme
+import java.io.File
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-class Photo(
-    val id: Int,
-    val url: String,
-)
+
+sealed interface PhotoItem {
+    val id: Int
+
+    data class Photo(
+        override val id: Int,
+        val url: String,
+    ) : PhotoItem
+
+    data object AddPhotoItem : PhotoItem {
+        override val id: Int = -1
+    }
+}
 
 @Composable
 fun PhotosGrid(
-    photos: List<Photo>,
+    photos: List<PhotoItem>,
     selectedIds: MutableState<Set<Int>>,
     modifier: Modifier = Modifier,
+    onSetUri: (Uri) -> Unit = {},
 ) {
     val inSelectionMode by remember { derivedStateOf { selectedIds.value.isNotEmpty() } }
     val state = rememberLazyGridState()
@@ -92,34 +105,48 @@ fun PhotosGrid(
             autoScrollThreshold = with(LocalDensity.current) { 40.dp.toPx() }
         )
     ) {
-        items(photos, key = { it.id }) { photo ->
+        items(photos.toMutableList() + PhotoItem.AddPhotoItem, key = { it.id }) { photo ->
             val selected by remember { derivedStateOf { selectedIds.value.contains(photo.id) } }
-            ImageItem(
-                photo, inSelectionMode, selected,
-                Modifier
-                    .semantics {
-                        if (!inSelectionMode) {
-                            onLongClick("Select") {
-                                selectedIds.value += photo.id
-                                true
-                            }
-                        }
-                    }
-                    .then(if (inSelectionMode) {
-                        Modifier.toggleable(
-                            value = selected,
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null, // do not show a ripple
-                            onValueChange = {
-                                if (it) {
-                                    selectedIds.value += photo.id
-                                } else {
-                                    selectedIds.value -= photo.id
+            when (photo) {
+                PhotoItem.AddPhotoItem -> {
+                    AddImageArea(
+                        modifier = Modifier.aspectRatio(1f),
+                        directory = File(LocalContext.current.cacheDir, "images"),
+                        onSetUri = onSetUri,
+                    )
+                }
+
+                is PhotoItem.Photo -> {
+                    ImageItem(
+                        photo = photo,
+                        inSelectionMode = inSelectionMode,
+                        selected = selected,
+                        modifier = Modifier
+                            .semantics {
+                                if (!inSelectionMode) {
+                                    onLongClick("Select") {
+                                        selectedIds.value += photo.id
+                                        true
+                                    }
                                 }
                             }
-                        )
-                    } else Modifier)
-            )
+                            .then(if (inSelectionMode) {
+                                Modifier.toggleable(
+                                    value = selected,
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null, // do not show a ripple
+                                    onValueChange = {
+                                        if (it) {
+                                            selectedIds.value += photo.id
+                                        } else {
+                                            selectedIds.value -= photo.id
+                                        }
+                                    }
+                                )
+                            } else Modifier)
+                    )
+                }
+            }
         }
     }
 }
@@ -180,12 +207,13 @@ fun Modifier.photoGridDragHandler(
 
 @Composable
 private fun ImageItem(
-    photo: Photo,
+    photo: PhotoItem.Photo,
     inSelectionMode: Boolean,
     selected: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Surface(
+        shape = RoundedCornerShape(24.dp),
         modifier = modifier.aspectRatio(1f),
         tonalElevation = 3.dp
     ) {
@@ -236,12 +264,12 @@ private fun ImageItem(
 private fun MyApp() {
     KTheme {
         PhotosGrid(
-            photos = List(2) {
-                Photo(
+            photos = List(3) {
+                PhotoItem.Photo(
                     id = it,
                     url = "https://picsum.photos/seed/${(0..100000).random()}/256/256"
                 )
-            },
+            } + PhotoItem.AddPhotoItem,
             selectedIds = rememberSaveable { mutableStateOf(emptySet()) }
         )
     }
