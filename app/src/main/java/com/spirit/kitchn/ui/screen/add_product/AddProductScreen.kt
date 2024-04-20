@@ -15,9 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,11 +31,13 @@ import java.io.File
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductScreen(
-    onDeleteAsset: (String) -> Unit,
+    onDeleteAsset: (Int) -> Unit,
     onAddAsset: (Uri) -> Unit,
     onAddProductClicked: () -> Unit,
     name: String,
+    productFamily: String,
     onNameChanged: (String) -> Unit,
+    onProductFamilyChanged: (String) -> Unit,
     photos: List<PhotoItem.Photo>,
 ) {
     Scaffold(
@@ -56,12 +55,12 @@ fun AddProductScreen(
         ) {
             AddAssetSection(
                 onAddAsset = onAddAsset,
+                onDeleteAsset = onDeleteAsset,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 16.dp)
                     .fillMaxWidth(),
                 photos = photos,
-                selectedIds = rememberSaveable { mutableStateOf(emptySet()) },
             )
             Text(
                 text = "Add some photo to describe your product",
@@ -70,6 +69,8 @@ fun AddProductScreen(
                     .padding(bottom = 24.dp),
             )
             NameField(value = name, onValueChanged = onNameChanged)
+            Spacer(modifier = Modifier.height(16.dp))
+            ProductFamilyField(value = productFamily, onValueChanged = onProductFamilyChanged)
             Spacer(modifier = Modifier.height(48.dp))
             KButton(
                 onClick = onAddProductClicked,
@@ -87,8 +88,8 @@ fun AddProductScreen(
 @Composable
 private fun AddAssetSection(
     onAddAsset: (Uri) -> Unit,
+    onDeleteAsset: (Int) -> Unit,
     photos: List<PhotoItem>,
-    selectedIds: MutableState<Set<Int>>,
     modifier: Modifier = Modifier,
 ) {
     if (photos.isEmpty()) {
@@ -101,7 +102,7 @@ private fun AddAssetSection(
         PhotosGrid(
             modifier = modifier,
             photos = photos,
-            selectedIds = selectedIds,
+            onDeleteAsset = onDeleteAsset,
             onSetUri = onAddAsset,
         )
     }
@@ -122,6 +123,20 @@ private fun NameField(value: String, onValueChanged: (String) -> Unit) {
     )
 }
 
+@Composable
+private fun ProductFamilyField(value: String, onValueChanged: (String) -> Unit) {
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        value = value,
+        onValueChange = onValueChanged,
+        label = {
+            Text("Product family (optional)")
+        }
+    )
+}
+
 @Preview
 @Composable
 private fun AddProductScreenPreview() {
@@ -132,6 +147,25 @@ private fun AddProductScreenPreview() {
             onAddProductClicked = {},
             onAddAsset = {},
             onDeleteAsset = {},
+            onProductFamilyChanged = {},
+            productFamily = "",
+            photos = listOf(PhotoItem.Photo(1, "")),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AddProductScreenPreview_withoutPhotos() {
+    KTheme {
+        AddProductScreen(
+            name = "",
+            onNameChanged = {},
+            onAddProductClicked = {},
+            onAddAsset = {},
+            onDeleteAsset = {},
+            onProductFamilyChanged = {},
+            productFamily = "",
             photos = listOf(),
         )
     }

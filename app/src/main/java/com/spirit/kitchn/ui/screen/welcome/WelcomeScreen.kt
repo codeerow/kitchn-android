@@ -21,33 +21,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.KButton
 import com.spirit.kitchn.ui.theme.KTheme
-import com.stevdzasan.onetap.rememberOneTapSignInState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WelcomeScreen(
-    isPreview: Boolean = false,
     email: String,
     password: String,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onLoginClicked: () -> Unit,
 ) {
-//    val state = rememberOneTapSignInState()
-//
-//    if (!isPreview) {
-//        OneTapSignInWithGoogle(
-//            state = state,
-//            clientId = "998789658191-tk4052teeaesflsjpin2mgn1m372gdtg.apps.googleusercontent.com",
-//            onTokenIdReceived = { tokenId ->
-//                Log.d("LOG", tokenId)
-//            },
-//            onDialogDismissed = { message ->
-//                Log.d("LOG", message)
-//            }
-//        )
-//    }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -115,7 +98,6 @@ private fun PasswordField(value: String, onValueChanged: (String) -> Unit) {
 private fun WelcomeScreenPreview() {
     KTheme {
         WelcomeScreen(
-            isPreview = true,
             email = "",
             password = "",
             onEmailChanged = {},

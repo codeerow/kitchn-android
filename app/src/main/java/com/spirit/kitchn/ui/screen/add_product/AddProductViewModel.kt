@@ -1,5 +1,6 @@
 package com.spirit.kitchn.ui.screen.add_product
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.spirit.kitchn.ui.component.PhotoItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,12 +11,23 @@ class AddProductViewModel(
 
     val photos = MutableStateFlow(listOf<PhotoItem.Photo>())
     val name = MutableStateFlow("")
+    val productFamily = MutableStateFlow("")
 
-    //    val assets = MutableStateFlow<List<AssetInfo>>(listOf())
-    val families = MutableStateFlow<List<String>>(listOf())
+    fun deleteAsset(assetId: Int) {
+        photos.tryEmit(
+            photos.value.toMutableList().apply {
+                removeIf { it.id == assetId }
+            }
+        )
+    }
 
-    fun deleteAsset() {
-
+    fun addAsset(uri: Uri) {
+        photos.tryEmit(
+            photos.value.toMutableList() + PhotoItem.Photo(
+                id = (0..Int.MAX_VALUE).random(),
+                url = uri.toString(),
+            )
+        )
     }
 
     fun onAddProductClicked() {
