@@ -8,6 +8,12 @@ class AddProductViewModel(
 ) : ViewModel() {
 
     val name = MutableStateFlow("")
+//    val assets = MutableStateFlow<List<AssetInfo>>(listOf())
+    val families = MutableStateFlow<List<String>>(listOf())
+
+    fun deleteAsset() {
+
+    }
 
     fun onAddProductClicked() {
 

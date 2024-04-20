@@ -1,4 +1,4 @@
-package com.spirit.kitchn.infrastructure.navigation.root
+package com.spirit.kitchn.infrastructure.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,10 +14,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.spirit.kitchn.core.user.product.AddProductUseCase
-import com.spirit.kitchn.infrastructure.navigation.screenFadeIn
-import com.spirit.kitchn.infrastructure.navigation.screenFadeOut
-import com.spirit.kitchn.infrastructure.navigation.screenSlideIn
-import com.spirit.kitchn.infrastructure.navigation.screenSlideOut
 import com.spirit.kitchn.ui.screen.add_product.AddProductScreen
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
 import com.spirit.kitchn.ui.screen.home.HomeScreen
@@ -39,7 +35,7 @@ internal const val PRODUCT_NOT_FOUND_ROUTE = "PRODUCT_NOT_FOUND_ROUTE/{$BARCODE_
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun RootHost() {
+internal fun NavigationGraph() {
     val rootController = rememberNavController()
 
     NavHost(
@@ -86,6 +82,8 @@ internal fun RootHost() {
                 onAddProductClicked = viewModel::onAddProductClicked,
                 onNameChanged = viewModel.name::tryEmit,
                 name = name,
+                onAddAssetClicked = {  },
+                onDeleteAssetClicked = { },
             )
         }
 

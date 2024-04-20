@@ -21,7 +21,7 @@ firebase-crashlytics = "2.9.9"
 google-services = "4.4.1"
 kotlinx-immutable-collections = "0.3.6"
 onetapcompose = "1.0.0"
-play-services-auth-version = "21.0.0"
+play-services-auth-version = "21.1.0"
 playServicesCodeScanner = "16.1.0"
 securityCrypto = "1.1.0-alpha06"
 

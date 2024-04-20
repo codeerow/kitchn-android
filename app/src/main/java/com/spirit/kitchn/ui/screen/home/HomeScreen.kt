@@ -47,13 +47,17 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LazyColumn(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(0.dp),
             ) {
                 items(products) {
                     ProductItem(
                         product = it,
                         onItemClick = onItemClicked
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
 
@@ -61,7 +65,7 @@ fun HomeScreen(
                 onClick = onAddProductClicked,
                 modifier = Modifier
                     .testTag("buttonAddProduct")
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 label = "Add Product"
             )

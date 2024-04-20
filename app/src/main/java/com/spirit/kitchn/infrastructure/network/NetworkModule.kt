@@ -54,6 +54,10 @@ private fun buildClient(tokenRepo: TokenRepo) = HttpClient(Android) {
                 val access = tokenRepo.accessToken
                 BearerTokens(access, "")
             }
+            refreshTokens {
+                val access = tokenRepo.accessToken
+                BearerTokens(access, "")
+            }
         }
     }
 }

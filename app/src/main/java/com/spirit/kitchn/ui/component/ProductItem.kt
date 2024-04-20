@@ -36,9 +36,8 @@ fun ProductItem(
 ) {
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(5.dp))
+            .clip(RoundedCornerShape(24.dp))
             .clickable { onItemClick(product.id) }
-            .padding(8.dp)
             .background(backgroundColor)
     ) {
         Row(

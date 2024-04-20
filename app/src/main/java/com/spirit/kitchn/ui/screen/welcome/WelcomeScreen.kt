@@ -73,7 +73,7 @@ fun WelcomeScreen(
                 onClick = onLoginClicked,
                 modifier = Modifier
                     .testTag("buttonLogin")
-                    .padding(horizontal = 24.dp)
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 label = "Login"
             )

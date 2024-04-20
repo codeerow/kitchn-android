@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kitchn</string>
+    <string name="fileprovider">com.spirit.kitchn.fileprovider</string>
 </resources>
