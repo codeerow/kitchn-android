@@ -83,4 +83,5 @@ dependencies {
     implementation(libs.one.tap.auth.compose)
     implementation(libs.androidx.security.crypto)
     implementation(libs.play.services.code.scanner)
+    implementation(libs.barcode.scanning)
 }

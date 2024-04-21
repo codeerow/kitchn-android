@@ -1,7 +1,6 @@
 package com.spirit.kitchn.ui.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +30,7 @@ import com.spirit.kitchn.ui.theme.KTheme
 fun ProductItem(
     product: Product,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.LightGray,
+    backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     onItemClick: (String) -> Unit = {},
 ) {
     Column(
@@ -50,13 +49,8 @@ fun ProductItem(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(80.dp)
-                    .border(
-                        width = 1.dp,
-                        color = Color.LightGray,
-                        shape = CircleShape
-                    )
                     .padding(3.dp)
-                    .clip(CircleShape)
+                    .clip(RoundedCornerShape(20.dp))
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column(
@@ -65,7 +59,7 @@ fun ProductItem(
                 Text(
                     text = product.name,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 20.sp
+                    fontSize = 18.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
             }
@@ -78,8 +72,7 @@ fun ProductItem(
 private fun ProductItem_preview() {
     KTheme {
         ProductItem(
-            product = Product(barcode = "das", name = "fds", imageUrl = "eq", id = ""),
-            backgroundColor = Color.LightGray,
+            product = Product(barcode = "das", name = "fds", id = ""),
             onItemClick = {},
         )
     }

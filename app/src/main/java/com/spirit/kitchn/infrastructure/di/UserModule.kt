@@ -4,6 +4,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.spirit.kitchn.core.user.personal_info.GetUserInfoUseCase
+import com.spirit.kitchn.core.user.product.AddProductManuallyUseCase
 import com.spirit.kitchn.core.user.product.AddProductUseCase
 import com.spirit.kitchn.core.user.product.DeleteProductUseCase
 import com.spirit.kitchn.core.user.product.GetMyProductsUseCase
@@ -69,6 +70,13 @@ val userModule = module {
     factory {
         DeleteProductUseCase(
             dataSource = get(),
+            httpClient = get(),
+        )
+    }
+
+    factory {
+        AddProductManuallyUseCase(
+            context = androidContext(),
             httpClient = get(),
         )
     }

@@ -22,7 +22,8 @@ val uiModule = module {
 
     viewModel { (barcode: String) ->
         AddProductViewModel(
-            barcode = barcode
+            barcode = barcode,
+            addProductManuallyUseCase = get(),
         )
     }
 }

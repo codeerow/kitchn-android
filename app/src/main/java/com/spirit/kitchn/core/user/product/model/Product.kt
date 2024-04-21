@@ -7,5 +7,6 @@ data class Product(
     val id: String,
     val barcode: String,
     val name: String,
-    val imageUrl: String,
-)
+) {
+    val imageUrl: String = "http://localhost:3000/static/${barcode}_0.jpg"
+}

@@ -83,13 +83,11 @@ private fun HomeScreenPreview() {
                 Product(
                     barcode = "123",
                     name = "321",
-                    imageUrl = "42",
                     id = "",
                 ),
                 Product(
                     barcode = "das",
                     name = "fds",
-                    imageUrl = "eq",
                     id = "",
                 )
             ),
