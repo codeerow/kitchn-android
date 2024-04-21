@@ -3,10 +3,10 @@ package com.spirit.kitchn.infrastructure.di
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.spirit.kitchn.core.user.personal_info.GetUserInfoUseCase
 import com.spirit.kitchn.core.user.product.AddProductUseCase
 import com.spirit.kitchn.core.user.product.DeleteProductUseCase
 import com.spirit.kitchn.core.user.product.GetMyProductsUseCase
-import com.spirit.kitchn.core.user.personal_info.GetUserInfoUseCase
 import com.spirit.kitchn.core.user.product.datasource.ProductDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -20,7 +20,11 @@ val userModule = module {
     single {
         val options = GmsBarcodeScannerOptions.Builder()
             .setBarcodeFormats(
-                Barcode.FORMAT_ALL_FORMATS,
+                Barcode.FORMAT_EAN_13,
+                Barcode.FORMAT_EAN_8,
+                Barcode.FORMAT_UPC_E,
+                Barcode.FORMAT_UPC_A,
+                Barcode.FORMAT_CODE_128,
             )
             .enableAutoZoom()
             .build()
@@ -58,6 +62,7 @@ val userModule = module {
             scanner = get(),
             dataSource = get(),
             httpClient = get(),
+            context = androidContext(),
         )
     }
 
