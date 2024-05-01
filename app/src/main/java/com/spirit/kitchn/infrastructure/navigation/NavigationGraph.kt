@@ -16,8 +16,11 @@ import androidx.navigation.navArgument
 import com.spirit.kitchn.core.user.product.AddProductUseCase
 import com.spirit.kitchn.ui.screen.add_product.AddProductScreen
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
+import com.spirit.kitchn.ui.screen.error.ErrorScreen
 import com.spirit.kitchn.ui.screen.home.HomeScreen
 import com.spirit.kitchn.ui.screen.home.HomeViewModel
+import com.spirit.kitchn.ui.screen.recipes.RecipesScreen
+import com.spirit.kitchn.ui.screen.recipes.RecipesViewModel
 import com.spirit.kitchn.ui.screen.welcome.WelcomeScreen
 import com.spirit.kitchn.ui.screen.welcome.WelcomeViewModel
 import kotlinx.coroutines.flow.collect
@@ -28,7 +31,9 @@ import org.koin.core.parameter.parametersOf
 /* ROUTES */
 internal const val WELCOME_ROUTE = "WELCOME_ROUTE"
 internal const val HOME_ROUTE = "HOME_ROUTE"
+internal const val RECIPES_ROUTE = "RECIPES_ROUTE"
 
+internal const val SCAN_ERROR_ROUTE = "SCAN_ERROR_ROUTE"
 internal const val BARCODE_ARG = "barcode"
 internal const val PRODUCT_NOT_FOUND_ROUTE = "PRODUCT_NOT_FOUND_ROUTE/{$BARCODE_ARG}"
 
@@ -93,6 +98,15 @@ internal fun NavigationGraph() {
         }
 
         composable(
+            route = SCAN_ERROR_ROUTE,
+        ) {
+            ErrorScreen(
+                title = "Error during scanning",
+                onBackClick = { rootController.navigateUp() },
+            )
+        }
+
+        composable(
             route = HOME_ROUTE,
         ) {
             val viewModel: HomeViewModel = koinNavViewModel()
@@ -106,7 +120,7 @@ internal fun NavigationGraph() {
                                 PRODUCT_NOT_FOUND_ROUTE.replace("{$BARCODE_ARG}", it.barcode)
                             )
 
-                            AddProductUseCase.Result.Failure.ScanFailed -> TODO()
+                            AddProductUseCase.Result.Failure.ScanFailed -> rootController.navigate(SCAN_ERROR_ROUTE)
                             AddProductUseCase.Result.Success -> {}
                         }
                     }
@@ -117,6 +131,20 @@ internal fun NavigationGraph() {
                 products = products,
                 onAddProductClicked = viewModel::onAddProductClicked,
                 onItemClicked = viewModel::onDeleteProductClicked,
+                onShowAllRecipesClicked = { rootController.navigate(RECIPES_ROUTE) }
+            )
+        }
+
+        composable(
+            route = RECIPES_ROUTE,
+        ) {
+            val viewModel: RecipesViewModel = koinNavViewModel()
+            val recipes by viewModel.recipes.collectAsState()
+
+            RecipesScreen(
+                recipes = recipes,
+                onAddRecipeClicked = {},
+                onItemClicked = {},
             )
         }
     }

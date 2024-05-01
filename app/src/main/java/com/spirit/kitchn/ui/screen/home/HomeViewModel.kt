@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.spirit.kitchn.core.user.product.AddProductUseCase
 import com.spirit.kitchn.core.user.product.DeleteProductUseCase
 import com.spirit.kitchn.core.user.product.GetMyProductsUseCase
-import com.spirit.kitchn.core.user.product.model.Product
+import com.spirit.kitchn.core.user.product.model.ProductDTO
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -20,8 +20,8 @@ class HomeViewModel(
     private val deleteProductUseCase: DeleteProductUseCase,
 ) : ViewModel() {
 
-    private val _products = MutableStateFlow<List<Product>>(listOf())
-    val products: StateFlow<List<Product>> = _products
+    private val _products = MutableStateFlow<List<ProductDTO>>(listOf())
+    val products: StateFlow<List<ProductDTO>> = _products
 
     private val _navigation = MutableSharedFlow<AddProductUseCase.Result>()
     val navigation: SharedFlow<AddProductUseCase.Result> = _navigation

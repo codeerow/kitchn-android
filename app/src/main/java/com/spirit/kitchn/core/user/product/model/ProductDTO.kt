@@ -3,7 +3,7 @@ package com.spirit.kitchn.core.user.product.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Product(
+data class ProductDTO(
     val id: String,
     val barcode: String,
     val name: String,

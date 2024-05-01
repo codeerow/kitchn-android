@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.screen.home
+package com.spirit.kitchn.ui.screen.recipes
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,23 +21,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.spirit.kitchn.core.user.product.model.ProductDTO
+import com.spirit.kitchn.core.recipe.model.RecipeDTO
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.ProductItem
+import com.spirit.kitchn.ui.component.RecipeItem
 import com.spirit.kitchn.ui.theme.KTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
-    onAddProductClicked: () -> Unit,
-    onShowAllRecipesClicked: () -> Unit,
+fun RecipesScreen(
+    onAddRecipeClicked: () -> Unit,
     onItemClicked: (String) -> Unit,
-    products: List<ProductDTO>,
+    recipes: List<RecipeDTO>,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text("Kitchn") })
+            TopAppBar(title = { Text("Recipes") })
         }
     ) { padding ->
         Column(
@@ -53,29 +52,21 @@ fun HomeScreen(
                     .padding(horizontal = 16.dp),
                 contentPadding = PaddingValues(0.dp),
             ) {
-                items(products) {
-                    ProductItem(
-                        product = it,
+                items(recipes) {
+                    RecipeItem(
+                        recipe = it,
                         onItemClick = onItemClicked
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
             KButton(
-                onClick = onShowAllRecipesClicked,
+                onClick = onAddRecipeClicked,
                 modifier = Modifier
-                    .testTag("recipes")
+                    .testTag("buttonAddRecipe")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
-                label = "All Recipes"
-            )
-            KButton(
-                onClick = onAddProductClicked,
-                modifier = Modifier
-                    .testTag("buttonAddProduct")
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                label = "Add Product"
+                label = "Add Recipe"
             )
             Spacer(modifier = Modifier.height(26.dp))
         }
@@ -86,22 +77,21 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     KTheme {
-        HomeScreen(
-            products = listOf(
-                ProductDTO(
-                    barcode = "123",
-                    name = "321",
+        RecipesScreen(
+            recipes = listOf(
+                RecipeDTO(
+                    title = "123",
+                    description = "321",
                     id = "",
                 ),
-                ProductDTO(
-                    barcode = "das",
-                    name = "fds",
+                RecipeDTO(
+                    title = "das",
+                    description = "fds",
                     id = "",
                 )
             ),
-            onAddProductClicked = {},
+            onAddRecipeClicked = {},
             onItemClicked = {},
-            onShowAllRecipesClicked = {},
         )
     }
 }
