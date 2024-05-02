@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.screen.add_recipe
+package com.spirit.kitchn.ui.screen.recipe_creation.create_recipe
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
@@ -29,16 +29,14 @@ import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddRecipeScreen(
-    onDeleteAsset: (Int) -> Unit,
-    onAddAsset: (Uri) -> Unit,
-    onAddRecipeClicked: () -> Unit,
+fun CreateRecipeScreen(
+    onUpdateAsset: (Uri) -> Unit,
+    onCreateRecipeClicked: () -> Unit,
+    onAddRecipeStepClicked: () -> Unit,
     name: String,
     description: String,
-    productFamily: String,
     onNameChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
-    onProductFamilyChanged: (String) -> Unit,
     photo: PhotoItem.Photo?,
 ) {
     Scaffold(
@@ -60,7 +58,7 @@ fun AddRecipeScreen(
                     .padding(horizontal = 16.dp, vertical = 16.dp)
                     .fillMaxWidth(),
                 directory = File(LocalContext.current.cacheDir, "recipes"),
-                onSetUri = onAddAsset,
+                onSetUri = onUpdateAsset,
             )
             Text(
                 text = "Add preview for your recipe",
@@ -72,29 +70,24 @@ fun AddRecipeScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             DescriptionField(value = description, onValueChanged = onDescriptionChanged)
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ProductFamilyField(value = productFamily, onValueChanged = onProductFamilyChanged)
-            Spacer(modifier = Modifier.height(16.dp))
-
+            Spacer(modifier = Modifier.height(48.dp))
 
             KButton(
-                onClick = onAddRecipeClicked,
+                onClick = onAddRecipeStepClicked,
                 modifier = Modifier
                     .testTag("buttonAddStep")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 label = "Add Step",
             )
-            Spacer(modifier = Modifier.height(48.dp))
 
             KButton(
-                onClick = onAddRecipeClicked,
+                onClick = onCreateRecipeClicked,
                 modifier = Modifier
-                    .testTag("buttonAddRecipe")
+                    .testTag("buttonCreate")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
-                label = "Add Recipe",
+                label = "Create",
             )
             Spacer(modifier = Modifier.height(26.dp))
         }
@@ -130,32 +123,17 @@ private fun DescriptionField(value: String, onValueChanged: (String) -> Unit) {
     )
 }
 
-@Composable
-private fun ProductFamilyField(value: String, onValueChanged: (String) -> Unit) {
-    TextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        value = value,
-        onValueChange = onValueChanged,
-        label = {
-            Text("Ingredients")
-        }
-    )
-}
 
 @Preview
 @Composable
-private fun AddRecipeScreenScreenPreview() {
+private fun CreateRecipeScreenPreview() {
     KTheme {
-        AddRecipeScreen(
+        CreateRecipeScreen(
             name = "",
             onNameChanged = {},
-            onAddRecipeClicked = {},
-            onAddAsset = {},
-            onDeleteAsset = {},
-            onProductFamilyChanged = {},
-            productFamily = "",
+            onCreateRecipeClicked = {},
+            onUpdateAsset = {},
+            onAddRecipeStepClicked = {},
             description = "",
             onDescriptionChanged = {},
             photo = PhotoItem.Photo(1, ""),
@@ -163,28 +141,17 @@ private fun AddRecipeScreenScreenPreview() {
     }
 }
 
-// TODO: add title, description, preview
-//       add step: {
-//          title
-//          ingredients
-//          description
-//          image
-//       }
-//
-
 @Preview
 @Composable
-private fun AddRecipeScreenPreview_withoutPhoto() {
+private fun CreateRecipeScreenPreview_withoutPhoto() {
     KTheme {
-        AddRecipeScreen(
+        CreateRecipeScreen(
             name = "",
             onNameChanged = {},
-            onAddRecipeClicked = {},
-            onAddAsset = {},
-            onDeleteAsset = {},
-            onProductFamilyChanged = {},
-            productFamily = "",
+            onCreateRecipeClicked = {},
+            onUpdateAsset = {},
             description = "",
+            onAddRecipeStepClicked = {},
             onDescriptionChanged = {},
             photo = null,
         )

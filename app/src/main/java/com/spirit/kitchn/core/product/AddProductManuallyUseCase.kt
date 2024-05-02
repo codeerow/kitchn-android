@@ -1,4 +1,4 @@
-package com.spirit.kitchn.core.user.product
+package com.spirit.kitchn.core.product
 
 import android.content.Context
 import android.net.Uri
@@ -20,12 +20,7 @@ class AddProductManuallyUseCase(
     private val context: Context,
 ) {
 
-    suspend fun execute(
-        barcode: String,
-        uris: List<Uri>,
-        name: String,
-        productFamily: String,
-    ) {
+    suspend fun execute(request: Request) = with(request) {
         val productFamilies = productFamily.split(",")
         httpClient.post("product") {
             contentType(ContentType.Application.Json)
@@ -39,7 +34,10 @@ class AddProductManuallyUseCase(
                         val inputData: ByteArray? = iStream?.let { getBytes(it) }
                         append("images", inputData!!, Headers.build {
                             append(HttpHeaders.ContentType, "image/png")
-                            append(HttpHeaders.ContentDisposition, "filename=${barcode}_${index}.jpg")
+                            append(
+                                HttpHeaders.ContentDisposition,
+                                "filename=${barcode}_${index}.jpg"
+                            )
                         })
                     }
                 }
@@ -57,4 +55,11 @@ class AddProductManuallyUseCase(
         }
         return byteBuffer.toByteArray()
     }
+
+    data class Request(
+        val barcode: String,
+        val uris: List<Uri>,
+        val name: String,
+        val productFamily: String,
+    )
 }

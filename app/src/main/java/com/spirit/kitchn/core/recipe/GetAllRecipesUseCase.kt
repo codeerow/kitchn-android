@@ -1,14 +1,13 @@
 package com.spirit.kitchn.core.recipe
 
-import com.spirit.kitchn.core.user.personal_info.model.PersonalInfo
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
+import com.spirit.kitchn.core.recipe.datasource.RecipeDataSource
+import com.spirit.kitchn.core.recipe.model.RecipeDTO
+import kotlinx.coroutines.flow.Flow
 
 class GetAllRecipesUseCase(
-    private val httpClient: HttpClient,
+    private val dataSource: RecipeDataSource,
 ) {
-    suspend fun execute(): PersonalInfo {
-        return httpClient.get("/user").body()
+    fun execute(): Flow<List<RecipeDTO>> {
+        return dataSource.observe()
     }
 }

@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.spirit.kitchn.core.user.product.AddProductManuallyUseCase
+import com.spirit.kitchn.core.product.AddProductManuallyUseCase
 import com.spirit.kitchn.ui.component.PhotoItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -30,19 +30,21 @@ class AddProductViewModel(
 
     fun onAddProductClicked() {
         viewModelScope.launch {
-            addProductManuallyUseCase.execute(
+            val request = AddProductManuallyUseCase.Request(
                 barcode = barcode,
                 uris = photos.value.map { it.url.toUri() },
                 name = name.value,
                 productFamily = productFamily.value
             )
+            addProductManuallyUseCase.execute(request)
         }
     }
 
     fun deleteAsset(id: Int) {
-//        photos.tryEmit(
-//            photos.value.toMutableList().removeIf { it.id == id }
-//        )
+        val newAssets = photos.value.toMutableList().apply {
+            removeIf { it.id == id }
+        }
+        photos.tryEmit(newAssets)
     }
 }
 

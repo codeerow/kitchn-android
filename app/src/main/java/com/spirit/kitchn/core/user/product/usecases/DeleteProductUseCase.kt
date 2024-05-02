@@ -1,11 +1,11 @@
-package com.spirit.kitchn.core.user.product
+package com.spirit.kitchn.core.user.product.usecases
 
-import com.spirit.kitchn.core.user.product.datasource.ProductDataSource
+import com.spirit.kitchn.core.user.product.datasource.UserProductDataSource
 import io.ktor.client.HttpClient
 import io.ktor.client.request.delete
 
 class DeleteProductUseCase(
-    private val dataSource: ProductDataSource,
+    private val dataSource: UserProductDataSource,
     private val httpClient: HttpClient,
 ) {
 

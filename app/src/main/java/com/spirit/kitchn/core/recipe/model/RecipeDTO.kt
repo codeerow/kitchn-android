@@ -1,5 +1,8 @@
 package com.spirit.kitchn.core.recipe.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class RecipeDTO(
     val id: String,
     val title: String,

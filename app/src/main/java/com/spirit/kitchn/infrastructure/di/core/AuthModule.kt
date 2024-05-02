@@ -1,4 +1,4 @@
-package com.spirit.kitchn.infrastructure.di
+package com.spirit.kitchn.infrastructure.di.core
 
 import com.spirit.kitchn.core.auth.LoginUseCase
 import com.spirit.kitchn.core.auth.repo.TokenRepo

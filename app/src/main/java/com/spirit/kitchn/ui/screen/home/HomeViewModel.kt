@@ -2,10 +2,10 @@ package com.spirit.kitchn.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.spirit.kitchn.core.user.product.AddProductUseCase
-import com.spirit.kitchn.core.user.product.DeleteProductUseCase
-import com.spirit.kitchn.core.user.product.GetMyProductsUseCase
-import com.spirit.kitchn.core.user.product.model.ProductDTO
+import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
+import com.spirit.kitchn.core.user.product.usecases.DeleteProductUseCase
+import com.spirit.kitchn.core.user.product.usecases.GetMyProductsUseCase
+import com.spirit.kitchn.core.product.model.ProductDTO
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

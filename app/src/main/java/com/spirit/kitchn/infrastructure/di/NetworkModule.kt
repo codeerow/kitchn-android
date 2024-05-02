@@ -1,4 +1,4 @@
-package com.spirit.kitchn.infrastructure.network
+package com.spirit.kitchn.infrastructure.di
 
 import android.util.Log
 import com.spirit.kitchn.BuildConfig
@@ -38,7 +38,7 @@ private fun buildClient(tokenRepo: TokenRepo) = HttpClient(Android) {
         level = LogLevel.ALL
         logger = object : Logger {
             override fun log(message: String) {
-                Log.d("Auth Client", message) // todo probably improve in the future
+                Log.d("Auth Client", message) // todo: probably improve in the future
             }
         }
     }

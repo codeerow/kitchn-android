@@ -13,11 +13,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.spirit.kitchn.core.user.product.AddProductUseCase
+import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
 import com.spirit.kitchn.ui.screen.add_product.AddProductScreen
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
-import com.spirit.kitchn.ui.screen.add_recipe.AddRecipeScreen
-import com.spirit.kitchn.ui.screen.add_recipe.AddRecipeViewModel
+import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepScreen
+import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeScreen
+import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
 import com.spirit.kitchn.ui.screen.error.ErrorScreen
 import com.spirit.kitchn.ui.screen.home.HomeScreen
 import com.spirit.kitchn.ui.screen.home.HomeViewModel
@@ -34,7 +35,8 @@ import org.koin.core.parameter.parametersOf
 internal const val WELCOME_ROUTE = "WELCOME_ROUTE"
 internal const val HOME_ROUTE = "HOME_ROUTE"
 internal const val RECIPES_ROUTE = "RECIPES_ROUTE"
-internal const val ADD_RECIPE_ROUTE = "ADD_RECIPE_ROUTE"
+internal const val CREATE_RECIPE_ROUTE = "ADD_RECIPE_ROUTE"
+internal const val ADD_STEP_RECIPE_ROUTE = "ADD_STEP_RECIPE_ROUTE"
 
 internal const val SCAN_ERROR_ROUTE = "SCAN_ERROR_ROUTE"
 internal const val BARCODE_ARG = "barcode"
@@ -123,7 +125,10 @@ internal fun NavigationGraph() {
                                 PRODUCT_NOT_FOUND_ROUTE.replace("{$BARCODE_ARG}", it.barcode)
                             )
 
-                            AddProductUseCase.Result.Failure.ScanFailed -> rootController.navigate(SCAN_ERROR_ROUTE)
+                            AddProductUseCase.Result.Failure.ScanFailed -> rootController.navigate(
+                                SCAN_ERROR_ROUTE
+                            )
+
                             AddProductUseCase.Result.Success -> {}
                         }
                     }
@@ -134,7 +139,8 @@ internal fun NavigationGraph() {
                 products = products,
                 onAddProductClicked = viewModel::onAddProductClicked,
                 onItemClicked = viewModel::onDeleteProductClicked,
-                onShowAllRecipesClicked = { rootController.navigate(RECIPES_ROUTE) }
+                onShowAllRecipesClicked = { rootController.navigate(RECIPES_ROUTE) },
+                onShowAvailableRecipesClicked = {},
             )
         }
 
@@ -146,21 +152,58 @@ internal fun NavigationGraph() {
 
             RecipesScreen(
                 recipes = recipes,
-                onAddRecipeClicked = {},
+                onAddRecipeClicked = { rootController.navigate(CREATE_RECIPE_ROUTE) },
                 onItemClicked = {},
             )
         }
 
         composable(
-            route = ADD_RECIPE_ROUTE,
+            route = CREATE_RECIPE_ROUTE,
         ) {
-            val viewModel: AddRecipeViewModel = koinNavViewModel()
-            val recipes by viewModel.recipes.collectAsState()
+            val viewModel: CreateRecipeViewModel = koinNavViewModel()
+//            val recipes by viewModel.recipes.collectAsState()
 
-            AddRecipeScreen(
-                recipes = recipes,
-                onAddRecipeClicked = {},
-                onItemClicked = {},
+            CreateRecipeScreen(
+                name = "",
+                onNameChanged = {},
+                onCreateRecipeClicked = {
+                    rootController.popBackStack(
+                        route = RECIPES_ROUTE,
+                        inclusive = false,
+                    )
+                },
+                onAddRecipeStepClicked = {
+                    rootController.navigate(ADD_STEP_RECIPE_ROUTE)
+                },
+                onUpdateAsset = {},
+                description = "",
+                onDescriptionChanged = {},
+                photo = null,
+            )
+        }
+
+        composable(
+            route = ADD_STEP_RECIPE_ROUTE,
+        ) {
+            val viewModel: CreateRecipeViewModel = koinNavViewModel()
+//            val recipes by viewModel.recipes.collectAsState()
+
+            AddRecipeStepScreen(
+                onCreateRecipeClicked = {
+                    rootController.popBackStack(
+                        route = RECIPES_ROUTE,
+                        inclusive = false,
+                    )
+                },
+                onUpdateAsset = {},
+                onProductFamilyChanged = {},
+                productFamily = "",
+                description = "",
+                onAddRecipeStepClicked = {
+                    rootController.navigate(ADD_STEP_RECIPE_ROUTE)
+                },
+                onDescriptionChanged = {},
+                photo = null,
             )
         }
     }

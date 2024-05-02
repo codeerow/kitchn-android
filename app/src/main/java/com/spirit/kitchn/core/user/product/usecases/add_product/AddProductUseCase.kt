@@ -1,4 +1,4 @@
-package com.spirit.kitchn.core.user.product
+package com.spirit.kitchn.core.user.product.usecases.add_product
 
 import android.content.Context
 import com.google.android.gms.common.moduleinstall.ModuleInstall
@@ -6,7 +6,8 @@ import com.google.android.gms.common.moduleinstall.ModuleInstallRequest
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import com.spirit.kitchn.core.user.product.datasource.ProductDataSource
+import com.spirit.kitchn.core.user.product.datasource.UserProductDataSource
+import com.spirit.kitchn.core.user.product.usecases.add_product.model.AddProductRequestBody
 import io.ktor.client.HttpClient
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -16,11 +17,10 @@ import io.ktor.http.contentType
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import kotlinx.serialization.Serializable
 
 class AddProductUseCase(
     private val scanner: GmsBarcodeScanner,
-    private val dataSource: ProductDataSource,
+    private val dataSource: UserProductDataSource,
     private val httpClient: HttpClient,
     private val context: Context,
 ) {
@@ -71,9 +71,6 @@ class AddProductUseCase(
             else -> null
         }
     }
-
-    @Serializable
-    private data class AddProductRequestBody(val barcode: String)
 
     sealed interface Result {
         data object Success : Result
