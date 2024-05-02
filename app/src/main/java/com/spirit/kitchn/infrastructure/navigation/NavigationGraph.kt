@@ -16,6 +16,8 @@ import androidx.navigation.navArgument
 import com.spirit.kitchn.core.user.product.AddProductUseCase
 import com.spirit.kitchn.ui.screen.add_product.AddProductScreen
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
+import com.spirit.kitchn.ui.screen.add_recipe.AddRecipeScreen
+import com.spirit.kitchn.ui.screen.add_recipe.AddRecipeViewModel
 import com.spirit.kitchn.ui.screen.error.ErrorScreen
 import com.spirit.kitchn.ui.screen.home.HomeScreen
 import com.spirit.kitchn.ui.screen.home.HomeViewModel
@@ -32,6 +34,7 @@ import org.koin.core.parameter.parametersOf
 internal const val WELCOME_ROUTE = "WELCOME_ROUTE"
 internal const val HOME_ROUTE = "HOME_ROUTE"
 internal const val RECIPES_ROUTE = "RECIPES_ROUTE"
+internal const val ADD_RECIPE_ROUTE = "ADD_RECIPE_ROUTE"
 
 internal const val SCAN_ERROR_ROUTE = "SCAN_ERROR_ROUTE"
 internal const val BARCODE_ARG = "barcode"
@@ -142,6 +145,19 @@ internal fun NavigationGraph() {
             val recipes by viewModel.recipes.collectAsState()
 
             RecipesScreen(
+                recipes = recipes,
+                onAddRecipeClicked = {},
+                onItemClicked = {},
+            )
+        }
+
+        composable(
+            route = ADD_RECIPE_ROUTE,
+        ) {
+            val viewModel: AddRecipeViewModel = koinNavViewModel()
+            val recipes by viewModel.recipes.collectAsState()
+
+            AddRecipeScreen(
                 recipes = recipes,
                 onAddRecipeClicked = {},
                 onItemClicked = {},
