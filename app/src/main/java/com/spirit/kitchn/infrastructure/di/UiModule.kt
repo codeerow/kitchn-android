@@ -33,6 +33,7 @@ val uiModule = module {
     viewModel {
         RecipesViewModel(
             getAllRecipesUseCase = get(),
+            deleteRecipeUseCase = get(),
         )
     }
 

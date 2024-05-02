@@ -80,12 +80,12 @@ private fun HomeScreenPreview() {
         RecipesScreen(
             recipes = listOf(
                 RecipeDTO(
-                    title = "123",
+                    name = "123",
                     description = "321",
                     id = "",
                 ),
                 RecipeDTO(
-                    title = "das",
+                    name = "das",
                     description = "fds",
                     id = "",
                 )

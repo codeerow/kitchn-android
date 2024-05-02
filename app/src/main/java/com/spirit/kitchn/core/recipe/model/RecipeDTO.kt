@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RecipeDTO(
     val id: String,
-    val title: String,
+    val name: String,
     val description: String,
 ) {
-    val imageUrl: String = "http://localhost:3000/static/${id}_0.jpg"
+    val imageUrl: String = "http://localhost:3000/static/${name}_preview.jpg"
 }

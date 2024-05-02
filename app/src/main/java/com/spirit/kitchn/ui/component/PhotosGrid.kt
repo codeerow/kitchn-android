@@ -131,7 +131,7 @@ fun Modifier.photoGridDragHandler(
 }
 
 @Composable
-private fun ImageItem(
+fun ImageItem(
     photo: PhotoItem.Photo,
     modifier: Modifier = Modifier,
 ) {

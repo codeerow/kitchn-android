@@ -23,8 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.spirit.kitchn.core.recipe.model.RecipeDTO
 import com.spirit.kitchn.core.product.model.ProductDTO
+import com.spirit.kitchn.core.recipe.model.RecipeDTO
 import com.spirit.kitchn.ui.theme.KTheme
 
 @Composable
@@ -58,7 +58,7 @@ fun RecipeItem(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = recipe.title,
+                    text = recipe.name,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp
                 )

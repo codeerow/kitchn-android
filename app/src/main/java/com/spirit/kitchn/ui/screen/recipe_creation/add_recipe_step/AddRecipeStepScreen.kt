@@ -57,7 +57,7 @@ fun AddRecipeStepScreen(
                     .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 16.dp)
                     .fillMaxWidth(),
-                directory = File(LocalContext.current.cacheDir, "recipes"),
+                directory = File(LocalContext.current.cacheDir, "images"),
                 onSetUri = onUpdateAsset,
             )
             Text(

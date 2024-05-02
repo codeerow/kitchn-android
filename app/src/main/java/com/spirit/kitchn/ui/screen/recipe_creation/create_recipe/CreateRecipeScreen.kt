@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.AddImageArea
+import com.spirit.kitchn.ui.component.ImageItem
 import com.spirit.kitchn.ui.component.KButton
 import com.spirit.kitchn.ui.component.PhotoItem
 import com.spirit.kitchn.ui.theme.KTheme
@@ -52,14 +53,24 @@ fun CreateRecipeScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AddImageArea(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp, vertical = 16.dp)
-                    .fillMaxWidth(),
-                directory = File(LocalContext.current.cacheDir, "recipes"),
-                onSetUri = onUpdateAsset,
-            )
+            if (photo == null) {
+                AddImageArea(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                        .fillMaxWidth(),
+                    directory = File(LocalContext.current.cacheDir, "images"),
+                    onSetUri = onUpdateAsset,
+                )
+            } else {
+                ImageItem(
+                    photo = photo,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
             Text(
                 text = "Add preview for your recipe",
                 modifier = Modifier

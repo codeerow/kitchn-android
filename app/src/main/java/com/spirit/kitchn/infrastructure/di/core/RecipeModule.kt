@@ -1,6 +1,7 @@
 package com.spirit.kitchn.infrastructure.di.core
 
 import com.spirit.kitchn.core.recipe.CreateRecipeUseCase
+import com.spirit.kitchn.core.recipe.DeleteRecipeUseCase
 import com.spirit.kitchn.core.recipe.GetAllRecipesUseCase
 import com.spirit.kitchn.core.recipe.datasource.RecipeDataSource
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +27,13 @@ val recipeModule = module {
         )
     }
 
+    factory {
+        DeleteRecipeUseCase(
+            dataSource = get(),
+            httpClient = get(),
+        )
+    }
+
     single {
         val coroutineScope = CoroutineScope(Job())
         registerCallback(object : ScopeCallback {
@@ -36,7 +44,7 @@ val recipeModule = module {
 
         RecipeDataSource(
             httpClient = get(),
-            coroutineScope = coroutineScope
+            coroutineScope = coroutineScope,
         )
     }
 }

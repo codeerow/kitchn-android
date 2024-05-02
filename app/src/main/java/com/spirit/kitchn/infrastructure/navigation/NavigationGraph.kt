@@ -16,12 +16,13 @@ import androidx.navigation.navArgument
 import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
 import com.spirit.kitchn.ui.screen.add_product.AddProductScreen
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
-import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepScreen
-import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeScreen
-import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
 import com.spirit.kitchn.ui.screen.error.ErrorScreen
 import com.spirit.kitchn.ui.screen.home.HomeScreen
 import com.spirit.kitchn.ui.screen.home.HomeViewModel
+import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepScreen
+import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepViewModel
+import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeScreen
+import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
 import com.spirit.kitchn.ui.screen.recipes.RecipesScreen
 import com.spirit.kitchn.ui.screen.recipes.RecipesViewModel
 import com.spirit.kitchn.ui.screen.welcome.WelcomeScreen
@@ -153,7 +154,7 @@ internal fun NavigationGraph() {
             RecipesScreen(
                 recipes = recipes,
                 onAddRecipeClicked = { rootController.navigate(CREATE_RECIPE_ROUTE) },
-                onItemClicked = {},
+                onItemClicked = viewModel::deleteRecipe,
             )
         }
 
@@ -161,31 +162,40 @@ internal fun NavigationGraph() {
             route = CREATE_RECIPE_ROUTE,
         ) {
             val viewModel: CreateRecipeViewModel = koinNavViewModel()
-//            val recipes by viewModel.recipes.collectAsState()
+
+            val name by viewModel.name.collectAsState()
+            val description by viewModel.description.collectAsState()
+            val preview by viewModel.preview.collectAsState()
+
+            LaunchedEffect(key1 = Unit) {
+                viewModel.navigation
+                    .onEach {
+                        rootController.popBackStack(
+                            route = RECIPES_ROUTE,
+                            inclusive = false,
+                        )
+                    }
+                    .collect()
+            }
 
             CreateRecipeScreen(
-                name = "",
-                onNameChanged = {},
-                onCreateRecipeClicked = {
-                    rootController.popBackStack(
-                        route = RECIPES_ROUTE,
-                        inclusive = false,
-                    )
-                },
+                name = name,
+                onNameChanged = viewModel.name::tryEmit,
+                onCreateRecipeClicked = viewModel::createRecipe,
                 onAddRecipeStepClicked = {
                     rootController.navigate(ADD_STEP_RECIPE_ROUTE)
                 },
-                onUpdateAsset = {},
-                description = "",
-                onDescriptionChanged = {},
-                photo = null,
+                onUpdateAsset = viewModel::addPreview,
+                description = description,
+                onDescriptionChanged = viewModel.description::tryEmit,
+                photo = preview,
             )
         }
 
         composable(
             route = ADD_STEP_RECIPE_ROUTE,
         ) {
-            val viewModel: CreateRecipeViewModel = koinNavViewModel()
+            val viewModel: AddRecipeStepViewModel = koinNavViewModel()
 //            val recipes by viewModel.recipes.collectAsState()
 
             AddRecipeStepScreen(

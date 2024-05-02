@@ -14,6 +14,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import kotlinx.serialization.Serializable
 
 class CreateRecipeUseCase(
     private val dataSource: RecipeDataSource,
@@ -21,26 +22,34 @@ class CreateRecipeUseCase(
     private val context: Context,
 ) {
     suspend fun execute(request: Request) = with(request) {
-        httpClient.post("product") {
+        httpClient.post("recipe") {
             contentType(ContentType.Application.Json)
             setBody(MultiPartFormDataContent(
                 formData {
-                    append("title", title)
+                    append("name", name)
                     append("description", description)
-                    val iStream = context.contentResolver.openInputStream(previewImage)
-                    val inputData: ByteArray? = iStream?.let { getBytes(it) }
-                    append("images", inputData!!, Headers.build {
-                        append(HttpHeaders.ContentType, "image/png")
-                        append(
-                            HttpHeaders.ContentDisposition,
-                            "filename=preview.jpg"
-                        )
-                    })
+                    previewImage?.let {
+                        val iStream = context.contentResolver.openInputStream(previewImage)
+                        val inputData: ByteArray? = iStream?.let { getBytes(it) }
+                        append("preview", inputData!!, Headers.build {
+                            append(HttpHeaders.ContentType, "image/png")
+                            append(
+                                HttpHeaders.ContentDisposition,
+                                "filename=preview.jpg"
+                            )
+                        })
+                    }
                 }
             ))
         }
         dataSource.refresh()
     }
+
+    @Serializable
+    data class RecipeRequestBody(
+        val title: String,
+        val description: String,
+    )
 
     private fun getBytes(inputStream: InputStream): ByteArray {
         val byteBuffer = ByteArrayOutputStream()
@@ -54,8 +63,8 @@ class CreateRecipeUseCase(
     }
 
     data class Request(
-        val title: String,
-        val previewImage: Uri,
+        val name: String,
+        val previewImage: Uri?,
         val description: String,
     )
 }
