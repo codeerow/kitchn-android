@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.component
+package com.spirit.kitchn.ui.component.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,12 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.spirit.kitchn.core.product.model.ProductDTO
-import com.spirit.kitchn.core.recipe.model.RecipeDTO
 import com.spirit.kitchn.ui.theme.KTheme
 
 @Composable
-fun RecipeItem(
-    recipe: RecipeDTO,
+fun ProductItem(
+    product: ProductDTO,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     onItemClick: (String) -> Unit = {},
@@ -37,7 +36,7 @@ fun RecipeItem(
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
-            .clickable { onItemClick(recipe.id) }
+            .clickable { onItemClick(product.id) }
             .background(backgroundColor)
     ) {
         Row(
@@ -45,7 +44,7 @@ fun RecipeItem(
                 .padding(16.dp)
         ) {
             AsyncImage(
-                model = recipe.imageUrl,
+                model = product.imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -58,7 +57,7 @@ fun RecipeItem(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = recipe.name,
+                    text = product.name,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp
                 )

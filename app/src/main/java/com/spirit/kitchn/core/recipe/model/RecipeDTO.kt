@@ -7,6 +7,12 @@ data class RecipeDTO(
     val id: String,
     val name: String,
     val description: String,
+    val images: List<Image>
+)
+
+@Serializable
+data class Image(
+    val name: String
 ) {
-    val imageUrl: String = "http://localhost:3000/static/${name}_preview.jpg"
+    val url: String = "http://localhost:3000/static/${name}"
 }

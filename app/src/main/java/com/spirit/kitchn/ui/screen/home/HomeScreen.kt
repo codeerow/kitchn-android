@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.core.product.model.ProductDTO
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.ProductItem
+import com.spirit.kitchn.ui.component.item.ProductItem
 import com.spirit.kitchn.ui.theme.KTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,55 +49,85 @@ fun HomeScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (products.isEmpty()) {
-                Text(
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(1f),
-                    text = "You have no products",
-                )
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp),
-                    contentPadding = PaddingValues(0.dp),
-                ) {
-                    items(products) {
-                        ProductItem(
-                            product = it,
-                            onItemClick = onItemClicked,
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-                }
-            }
-            KButton(
-                onClick = onShowAllRecipesClicked,
+            ProductList(
+                products = products,
+                onItemClick = onItemClicked,
                 modifier = Modifier
-                    .testTag("seeAllRecipes")
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                label = "All Recipes"
+                    .weight(1f)
             )
-            KButton(
-                onClick = onShowAvailableRecipesClicked,
-                modifier = Modifier
-                    .testTag("seeAvailableRecipes")
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                label = "See Available Recipes"
-            )
-            KButton(
-                onClick = onAddProductClicked,
-                modifier = Modifier
-                    .testTag("buttonAddProduct")
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                label = "Add Product"
-            )
+
+            ShowAllRecipeButton(onClick = onShowAllRecipesClicked)
+            ShowAvailableRecipeButton(onClick = onShowAvailableRecipesClicked)
+            AddProductButton(onClick = onAddProductClicked)
+
             Spacer(modifier = Modifier.height(26.dp))
         }
     }
+}
+
+@Composable
+private fun ProductList(
+    products: List<ProductDTO>,
+    modifier: Modifier,
+    onItemClick: (String) -> Unit,
+) {
+    if (products.isEmpty()) {
+        Text(
+            textAlign = TextAlign.Center,
+            modifier = modifier,
+            text = "You have no products",
+        )
+    } else {
+        LazyColumn(
+            modifier = modifier
+                .padding(horizontal = 16.dp),
+            contentPadding = PaddingValues(0.dp),
+        ) {
+            items(products) {
+                ProductItem(
+                    product = it,
+                    onItemClick = onItemClick,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun AddProductButton(onClick: () -> Unit) {
+    KButton(
+        onClick = onClick,
+        modifier = Modifier
+            .testTag("buttonAddProduct")
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        label = "Add Product"
+    )
+}
+
+@Composable
+private fun ShowAvailableRecipeButton(onClick: () -> Unit) {
+    KButton(
+        onClick = onClick,
+        modifier = Modifier
+            .testTag("seeAvailableRecipes")
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        label = "See Available Recipes"
+    )
+}
+
+@Composable
+private fun ShowAllRecipeButton(onClick: () -> Unit) {
+    KButton(
+        onClick = onClick,
+        modifier = Modifier
+            .testTag("seeAllRecipes")
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        label = "All Recipes"
+    )
 }
 
 @Preview

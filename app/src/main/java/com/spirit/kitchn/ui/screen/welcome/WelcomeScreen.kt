@@ -46,6 +46,7 @@ fun WelcomeScreen(
         ) {
 
             Spacer(modifier = Modifier.weight(1f))
+
             EmailField(value = email, onValueChanged = onEmailChanged)
             Spacer(modifier = Modifier.height(16.dp))
 
