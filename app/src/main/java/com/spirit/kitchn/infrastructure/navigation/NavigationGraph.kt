@@ -23,6 +23,8 @@ import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStep
 import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeScreen
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
+import com.spirit.kitchn.ui.screen.recipe_description.RecipeDescriptionScreen
+import com.spirit.kitchn.ui.screen.recipe_description.RecipeDescriptionViewModel
 import com.spirit.kitchn.ui.screen.recipes.RecipesScreen
 import com.spirit.kitchn.ui.screen.recipes.RecipesViewModel
 import com.spirit.kitchn.ui.screen.welcome.WelcomeScreen
@@ -38,8 +40,11 @@ internal const val HOME_ROUTE = "HOME_ROUTE"
 internal const val RECIPES_ROUTE = "RECIPES_ROUTE"
 internal const val CREATE_RECIPE_ROUTE = "ADD_RECIPE_ROUTE"
 internal const val ADD_STEP_RECIPE_ROUTE = "ADD_STEP_RECIPE_ROUTE"
-
 internal const val SCAN_ERROR_ROUTE = "SCAN_ERROR_ROUTE"
+
+internal const val RECIPE_ID_ARG = "recipe_id"
+internal const val RECIPE_DESCRIPTION_ROUTE = "RECIPE_DESCRIPTION_ROUTE/{$RECIPE_ID_ARG}"
+
 internal const val BARCODE_ARG = "barcode"
 internal const val PRODUCT_NOT_FOUND_ROUTE = "PRODUCT_NOT_FOUND_ROUTE/{$BARCODE_ARG}"
 
@@ -154,7 +159,10 @@ internal fun NavigationGraph() {
             RecipesScreen(
                 recipes = recipes,
                 onAddRecipeClicked = { rootController.navigate(CREATE_RECIPE_ROUTE) },
-                onItemClicked = viewModel::deleteRecipe,
+                onItemClicked = {
+                    val route = RECIPE_DESCRIPTION_ROUTE.replace("{$RECIPE_ID_ARG}", it)
+                    rootController.navigate(route)
+                },
             )
         }
 
@@ -227,6 +235,36 @@ internal fun NavigationGraph() {
                 onAddRecipeStepClicked = viewModel::addRecipeStep,
                 onDescriptionChanged = viewModel.description::tryEmit,
                 photo = preview,
+            )
+        }
+
+        composable(
+            route = RECIPE_DESCRIPTION_ROUTE,
+            arguments = listOf(navArgument(RECIPE_ID_ARG) { type = NavType.StringType })
+        ) { backStackEntry ->
+            val recipeIdArg = backStackEntry.arguments?.getString(RECIPE_ID_ARG) ?: ""
+
+            val viewModel: RecipeDescriptionViewModel = koinNavViewModel {
+                parametersOf(recipeIdArg)
+            }
+
+            val recipe by viewModel.recipe.collectAsState()
+
+            LaunchedEffect(key1 = Unit) {
+                viewModel.navigation.onEach {
+                    when (it) {
+                        RecipeDescriptionViewModel.Navigation.RecipeDeleted -> rootController.popBackStack(
+                            route = RECIPES_ROUTE,
+                            inclusive = false,
+                        )
+                    }
+                }.collect()
+            }
+
+            RecipeDescriptionScreen(
+                recipe = recipe,
+                onStartCookingClicked = {},
+                onDeleteClicked = viewModel::deleteRecipe,
             )
         }
     }

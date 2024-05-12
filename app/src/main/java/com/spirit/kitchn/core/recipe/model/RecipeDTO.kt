@@ -8,10 +8,11 @@ data class RecipeDTO(
     val name: String,
     val description: String,
     val images: List<Image>,
-//    val steps: List<StepDTO>,
+    val steps: List<StepDTO>,
 ) {
 
     val preview: Image? = images.getOrNull(0)
+    val ingredients = steps.flatMap { it.ingredients }
 
     @Serializable
     data class StepDTO(

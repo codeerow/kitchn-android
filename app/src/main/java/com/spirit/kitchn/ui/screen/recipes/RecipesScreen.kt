@@ -15,11 +15,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.core.recipe.model.RecipeDTO
+import com.spirit.kitchn.ui.component.CustomStaggeredVerticalGrid
 import com.spirit.kitchn.ui.component.KButton
 import com.spirit.kitchn.ui.component.item.RecipeItem
 import com.spirit.kitchn.ui.theme.KTheme
@@ -44,93 +44,59 @@ fun RecipesScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
+            RecipesGrid(
                 modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-                    .padding(5.dp)
-            ) {
-                CustomStaggeredVerticalGrid(
-                    numColumns = 2,
-                    modifier = Modifier.padding(5.dp)
-                ) {
-                    recipes.forEach { recipe ->
-                        RecipeItem(
-                            item = recipe,
-                            isPreview = isPreview,
-                            onItemClicked = onItemClicked,
-                        )
-                    }
-                }
-            }
-
-            KButton(
-                onClick = onAddRecipeClicked,
-                modifier = Modifier
-                    .testTag("buttonAddRecipe")
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                label = "Add Recipe"
+                    .weight(1f),
+                onItemClicked = onItemClicked,
+                isPreview = isPreview,
+                recipes = recipes,
             )
+            AddRecipeButton(onAddRecipeClicked = onAddRecipeClicked)
+
             Spacer(modifier = Modifier.height(26.dp))
         }
     }
 }
 
-
 @Composable
-fun CustomStaggeredVerticalGrid(
+private fun RecipesGrid(
     modifier: Modifier = Modifier,
-    numColumns: Int = 2,
-    content: @Composable () -> Unit,
+    recipes: List<RecipeDTO>,
+    isPreview: Boolean = false,
+    onItemClicked: (String) -> Unit,
 ) {
-    Layout(
-        content = content,
+    Column(
         modifier = modifier
-    ) { measurables, constraints ->
-        val columnWidth = (constraints.maxWidth / numColumns)
-        val itemConstraints = constraints.copy(maxWidth = columnWidth)
-        val columnHeights = IntArray(numColumns) { 0 }
-        val placeables = measurables.map { measurable ->
-            val column = testColumn(columnHeights)
-            val placeable = measurable.measure(itemConstraints)
-            columnHeights[column] += placeable.height
-            placeable
-        }
-
-        val height =
-            columnHeights.maxOrNull()?.coerceIn(constraints.minHeight, constraints.maxHeight)
-                ?: constraints.minHeight
-
-        layout(
-            width = constraints.maxWidth,
-            height = height
+            .verticalScroll(rememberScrollState())
+            .padding(5.dp)
+    ) {
+        CustomStaggeredVerticalGrid(
+            numColumns = 2,
+            modifier = Modifier.padding(5.dp)
         ) {
-            val columnYPointers = IntArray(numColumns) { 0 }
-
-            placeables.forEach { placeable ->
-                val column = testColumn(columnYPointers)
-
-                placeable.place(
-                    x = columnWidth * column,
-                    y = columnYPointers[column]
+            recipes.forEach { recipe ->
+                RecipeItem(
+                    item = recipe,
+                    isPreview = isPreview,
+                    onItemClicked = onItemClicked,
                 )
-                columnYPointers[column] += placeable.height
             }
         }
     }
 }
 
-private fun testColumn(columnHeights: IntArray): Int {
-    var minHeight = Int.MAX_VALUE
-    var columnIndex = 0
-    columnHeights.forEachIndexed { index, height ->
-        if (height < minHeight) {
-            minHeight = height
-            columnIndex = index
-        }
-    }
-    return columnIndex
+@Composable
+private fun AddRecipeButton(
+    onAddRecipeClicked: () -> Unit,
+) {
+    KButton(
+        onClick = onAddRecipeClicked,
+        modifier = Modifier
+            .testTag("buttonAddRecipe")
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        label = "Add Recipe"
+    )
 }
 
 @Preview
@@ -144,14 +110,14 @@ private fun HomeScreenPreview() {
                     description = "321",
                     id = "",
                     images = listOf(),
-//                    steps = listOf(),
+                    steps = listOf(),
                 ),
                 RecipeDTO(
                     name = "das",
                     description = "fds",
                     id = "",
                     images = listOf(),
-//                    steps = listOf(),
+                    steps = listOf(),
                 )
             ),
             onAddRecipeClicked = {},
