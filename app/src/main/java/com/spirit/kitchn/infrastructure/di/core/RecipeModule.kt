@@ -4,6 +4,7 @@ import com.spirit.kitchn.core.recipe.CreateRecipeUseCase
 import com.spirit.kitchn.core.recipe.DeleteRecipeUseCase
 import com.spirit.kitchn.core.recipe.GetAllRecipesUseCase
 import com.spirit.kitchn.core.recipe.datasource.RecipeDataSource
+import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -46,5 +47,9 @@ val recipeModule = module {
             httpClient = get(),
             coroutineScope = coroutineScope,
         )
+    }
+
+    scope<CreateRecipeViewModel> {
+        scoped { CreateRecipeUseCase.Request() }
     }
 }

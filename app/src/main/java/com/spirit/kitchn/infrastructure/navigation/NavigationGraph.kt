@@ -168,23 +168,25 @@ internal fun NavigationGraph() {
             val preview by viewModel.preview.collectAsState()
 
             LaunchedEffect(key1 = Unit) {
-                viewModel.navigation
-                    .onEach {
-                        rootController.popBackStack(
+                viewModel.navigation.onEach {
+                    when (it) {
+                        CreateRecipeViewModel.Navigation.AddRecipeStep -> rootController.navigate(
+                            ADD_STEP_RECIPE_ROUTE
+                        )
+
+                        CreateRecipeViewModel.Navigation.RecipeCreated -> rootController.popBackStack(
                             route = RECIPES_ROUTE,
                             inclusive = false,
                         )
                     }
-                    .collect()
+                }.collect()
             }
 
             CreateRecipeScreen(
                 name = name,
                 onNameChanged = viewModel.name::tryEmit,
                 onCreateRecipeClicked = viewModel::createRecipe,
-                onAddRecipeStepClicked = {
-                    rootController.navigate(ADD_STEP_RECIPE_ROUTE)
-                },
+                onAddRecipeStepClicked = viewModel::addRecipeStep,
                 onUpdateAsset = viewModel::addPreview,
                 description = description,
                 onDescriptionChanged = viewModel.description::tryEmit,
@@ -196,24 +198,35 @@ internal fun NavigationGraph() {
             route = ADD_STEP_RECIPE_ROUTE,
         ) {
             val viewModel: AddRecipeStepViewModel = koinNavViewModel()
-//            val recipes by viewModel.recipes.collectAsState()
+
+            val description by viewModel.description.collectAsState()
+            val ingredients by viewModel.ingredients.collectAsState()
+            val preview by viewModel.preview.collectAsState()
+
+            LaunchedEffect(key1 = Unit) {
+                viewModel.navigation.onEach {
+                    when (it) {
+                        AddRecipeStepViewModel.Navigation.AddRecipeStep -> rootController.navigate(
+                            ADD_STEP_RECIPE_ROUTE
+                        )
+
+                        AddRecipeStepViewModel.Navigation.RecipeCreated -> rootController.popBackStack(
+                            route = RECIPES_ROUTE,
+                            inclusive = false,
+                        )
+                    }
+                }.collect()
+            }
 
             AddRecipeStepScreen(
-                onCreateRecipeClicked = {
-                    rootController.popBackStack(
-                        route = RECIPES_ROUTE,
-                        inclusive = false,
-                    )
-                },
-                onUpdateAsset = {},
-                onProductFamilyChanged = {},
-                productFamily = "",
-                description = "",
-                onAddRecipeStepClicked = {
-                    rootController.navigate(ADD_STEP_RECIPE_ROUTE)
-                },
-                onDescriptionChanged = {},
-                photo = null,
+                onCreateRecipeClicked = viewModel::createRecipe,
+                onUpdateAsset = viewModel::addPreview,
+                onIngredientChanged = viewModel.ingredients::tryEmit,
+                ingredients = ingredients,
+                description = description,
+                onAddRecipeStepClicked = viewModel::addRecipeStep,
+                onDescriptionChanged = viewModel.description::tryEmit,
+                photo = preview,
             )
         }
     }

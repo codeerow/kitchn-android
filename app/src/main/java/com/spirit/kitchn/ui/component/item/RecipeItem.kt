@@ -46,10 +46,10 @@ fun RecipeItem(
                     alignment = Alignment.Center,
                 )
             } else {
-                if (item.images.isNotEmpty()) {
+                item.preview?.url?.let { preview ->
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(item.images[0].url)
+                            .data(preview)
                             .crossfade(true)
                             .build(),
                         contentDescription = "",

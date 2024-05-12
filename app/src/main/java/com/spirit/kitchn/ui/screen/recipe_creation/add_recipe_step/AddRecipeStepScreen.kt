@@ -34,9 +34,9 @@ fun AddRecipeStepScreen(
     onCreateRecipeClicked: () -> Unit,
     onAddRecipeStepClicked: () -> Unit,
     description: String,
-    productFamily: String,
+    ingredients: String,
     onDescriptionChanged: (String) -> Unit,
-    onProductFamilyChanged: (String) -> Unit,
+    onIngredientChanged: (String) -> Unit,
     photo: PhotoItem.Photo?,
 ) {
     Scaffold(
@@ -66,7 +66,7 @@ fun AddRecipeStepScreen(
                     .padding(horizontal = 16.dp)
                     .padding(bottom = 24.dp),
             )
-            IngredientsField(value = productFamily, onValueChanged = onProductFamilyChanged)
+            IngredientsField(value = ingredients, onValueChanged = onIngredientChanged)
             Spacer(modifier = Modifier.height(16.dp))
 
             DescriptionField(value = description, onValueChanged = onDescriptionChanged)
@@ -130,8 +130,8 @@ private fun AddRecipeStepScreenPreview_withoutPhoto() {
         AddRecipeStepScreen(
             onCreateRecipeClicked = {},
             onUpdateAsset = {},
-            onProductFamilyChanged = {},
-            productFamily = "",
+            onIngredientChanged = {},
+            ingredients = "",
             description = "",
             onAddRecipeStepClicked = {},
             onDescriptionChanged = {},

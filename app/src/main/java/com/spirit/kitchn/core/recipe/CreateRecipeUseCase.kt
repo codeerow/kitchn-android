@@ -15,6 +15,8 @@ import io.ktor.http.contentType
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class CreateRecipeUseCase(
     private val dataSource: RecipeDataSource,
@@ -28,8 +30,8 @@ class CreateRecipeUseCase(
                 formData {
                     append("name", name)
                     append("description", description)
-                    previewImage?.let {
-                        val iStream = context.contentResolver.openInputStream(previewImage)
+                    previewImage?.let { uri ->
+                        val iStream = context.contentResolver.openInputStream(uri)
                         val inputData: ByteArray? = iStream?.let { getBytes(it) }
                         append("preview", inputData!!, Headers.build {
                             append(HttpHeaders.ContentType, "image/png")
@@ -39,17 +41,12 @@ class CreateRecipeUseCase(
                             )
                         })
                     }
+                    append("steps", Json.encodeToString(steps))
                 }
             ))
         }
         dataSource.refresh()
     }
-
-    @Serializable
-    data class RecipeRequestBody(
-        val title: String,
-        val description: String,
-    )
 
     private fun getBytes(inputStream: InputStream): ByteArray {
         val byteBuffer = ByteArrayOutputStream()
@@ -63,8 +60,16 @@ class CreateRecipeUseCase(
     }
 
     data class Request(
-        val name: String,
-        val previewImage: Uri?,
-        val description: String,
-    )
+        var name: String = "",
+        var previewImage: Uri? = null,
+        var description: String = "",
+        var steps: List<Step> = listOf(),
+    ) {
+        @Serializable
+        data class Step(
+            var description: String = "",
+            var ingredients: List<String> = listOf(),
+//            var preview: Uri? = null,
+        )
+    }
 }

@@ -38,14 +38,21 @@ val uiModule = module {
     }
 
     viewModel {
+        val creationScope = getKoin().getOrCreateScope<CreateRecipeViewModel>("")
+
         AddRecipeStepViewModel(
             createRecipeUseCase = get(),
+            recipeCreationRequest = creationScope.get(),
         )
     }
 
     viewModel {
+        val creationScope = getKoin().getOrCreateScope<CreateRecipeViewModel>("")
+
         CreateRecipeViewModel(
             createRecipeUseCase = get(),
+            recipeCreationRequest = creationScope.get(),
+            onCleared = { creationScope.close() }
         )
     }
 }

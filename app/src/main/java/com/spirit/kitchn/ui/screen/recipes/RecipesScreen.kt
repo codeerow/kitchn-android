@@ -144,12 +144,14 @@ private fun HomeScreenPreview() {
                     description = "321",
                     id = "",
                     images = listOf(),
+//                    steps = listOf(),
                 ),
                 RecipeDTO(
                     name = "das",
                     description = "fds",
                     id = "",
                     images = listOf(),
+//                    steps = listOf(),
                 )
             ),
             onAddRecipeClicked = {},

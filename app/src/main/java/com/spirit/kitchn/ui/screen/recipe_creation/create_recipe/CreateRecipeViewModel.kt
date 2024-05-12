@@ -12,8 +12,10 @@ import kotlinx.coroutines.launch
 
 class CreateRecipeViewModel(
     private val createRecipeUseCase: CreateRecipeUseCase,
+    private val recipeCreationRequest: CreateRecipeUseCase.Request,
+    private val onCleared: () -> Unit,
 ) : ViewModel() {
-    val navigation = MutableSharedFlow<Unit>()
+    val navigation = MutableSharedFlow<Navigation>()
     val name = MutableStateFlow("")
     val description = MutableStateFlow("")
     val preview = MutableStateFlow<PhotoItem.Photo?>(null)
@@ -26,7 +28,7 @@ class CreateRecipeViewModel(
                 previewImage = preview.value?.url?.toUri(),
             )
             createRecipeUseCase.execute(request)
-            navigation.emit(Unit)
+            navigation.emit(Navigation.RecipeCreated)
         }
     }
 
@@ -39,5 +41,24 @@ class CreateRecipeViewModel(
                 )
             )
         }
+    }
+
+    fun addRecipeStep() {
+        viewModelScope.launch {
+            recipeCreationRequest.name = name.value
+            recipeCreationRequest.description = description.value
+            recipeCreationRequest.previewImage = preview.value?.url?.toUri()
+            navigation.emit(Navigation.AddRecipeStep)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        onCleared.invoke()
+    }
+
+    sealed interface Navigation {
+        data object AddRecipeStep : Navigation
+        data object RecipeCreated : Navigation
     }
 }
