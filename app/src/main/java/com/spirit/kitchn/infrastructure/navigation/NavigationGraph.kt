@@ -251,7 +251,7 @@ internal fun NavigationGraph() {
                 parametersOf(recipeIdArg)
             }
 
-            val recipe by viewModel.recipe.collectAsState()
+            val state by viewModel.state.collectAsState()
 
             LaunchedEffect(key1 = Unit) {
                 viewModel.navigation.onEach {
@@ -265,7 +265,7 @@ internal fun NavigationGraph() {
             }
 
             RecipeDescriptionScreen(
-                recipe = recipe,
+                state = state,
                 onDeleteClicked = viewModel::deleteRecipe,
             )
         }

@@ -11,9 +11,6 @@ data class RecipeDTO(
     val steps: List<StepDTO>,
 ) {
 
-    val preview: Image? = images.getOrNull(0)
-    val ingredients = steps.flatMap { it.productFamilies }
-
     @Serializable
     data class StepDTO(
         val id: String,

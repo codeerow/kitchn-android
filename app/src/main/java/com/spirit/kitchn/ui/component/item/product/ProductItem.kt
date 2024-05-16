@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.component.item
+package com.spirit.kitchn.ui.component.item.product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,12 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.spirit.kitchn.core.product.model.ProductDTO
 import com.spirit.kitchn.ui.theme.KTheme
 
 @Composable
 fun ProductItem(
-    product: ProductDTO,
+    product: ProductItemVO,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.primaryContainer,
     onItemClick: (String) -> Unit = {},
@@ -71,7 +70,7 @@ fun ProductItem(
 private fun ProductItem_preview() {
     KTheme {
         ProductItem(
-            product = ProductDTO(barcode = "das", name = "fds", id = ""),
+            product = ProductItemVO(imageUrl = "das", name = "fds", id = ""),
             onItemClick = {},
         )
     }

@@ -18,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.spirit.kitchn.core.recipe.model.RecipeDTO
 import com.spirit.kitchn.ui.component.CustomStaggeredVerticalGrid
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.item.RecipeItem
+import com.spirit.kitchn.ui.component.item.recipe.RecipeItem
+import com.spirit.kitchn.ui.component.item.recipe.RecipeItemVO
 import com.spirit.kitchn.ui.theme.KTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +29,7 @@ import com.spirit.kitchn.ui.theme.KTheme
 fun RecipesScreen(
     onAddRecipeClicked: () -> Unit,
     onItemClicked: (String) -> Unit,
-    recipes: List<RecipeDTO>,
+    recipes: List<RecipeItemVO>,
     isPreview: Boolean = false,
 ) {
     Scaffold(
@@ -62,7 +62,7 @@ fun RecipesScreen(
 @Composable
 private fun RecipesGrid(
     modifier: Modifier = Modifier,
-    recipes: List<RecipeDTO>,
+    recipes: List<RecipeItemVO>,
     isPreview: Boolean = false,
     onItemClicked: (String) -> Unit,
 ) {
@@ -106,19 +106,15 @@ private fun HomeScreenPreview() {
     KTheme {
         RecipesScreen(
             recipes = listOf(
-                RecipeDTO(
+                RecipeItemVO(
+                    id = "",
                     name = "123",
-                    description = "321",
-                    id = "",
-                    images = listOf(),
-                    steps = listOf(),
+                    imageUrl = null,
                 ),
-                RecipeDTO(
-                    name = "das",
-                    description = "fds",
+                RecipeItemVO(
                     id = "",
-                    images = listOf(),
-                    steps = listOf(),
+                    name = "das",
+                    imageUrl = null,
                 )
             ),
             onAddRecipeClicked = {},

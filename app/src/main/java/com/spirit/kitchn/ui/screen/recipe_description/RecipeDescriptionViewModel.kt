@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.spirit.kitchn.core.recipe.DeleteRecipeUseCase
 import com.spirit.kitchn.core.recipe.GetRecipeDescriptionUseCase
 import com.spirit.kitchn.core.recipe.model.RecipeDTO
+import com.spirit.kitchn.ui.screen.recipe_description.model.StepItemVO
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,12 +19,13 @@ class RecipeDescriptionViewModel(
 
     val navigation = MutableSharedFlow<Navigation>()
 
-    private val _recipe = MutableStateFlow<RecipeDTO?>(null)
-    val recipe: StateFlow<RecipeDTO?> = _recipe
+    private val _state = MutableStateFlow<State>(State.Loading)
+    val state: StateFlow<State> = _state
 
     init {
         viewModelScope.launch {
-            _recipe.emit(getRecipeDescriptionUseCase.execute(recipeIdArg))
+            val content = getRecipeDescriptionUseCase.execute(recipeIdArg).toContent()
+            _state.emit(content)
         }
     }
 
@@ -34,7 +36,38 @@ class RecipeDescriptionViewModel(
         }
     }
 
+    private fun RecipeDTO.toContent(): State.Content {
+        return State.Content(
+            title = this.name,
+            headerImageUrl = this.images.firstOrNull()?.url,
+            description = this.description,
+            ingredients = steps.flatMap { it.productFamilies.map { it.title } },
+            steps = steps.map {
+                StepItemVO(
+                    description = it.description,
+                    ingredients = it.productFamilies.joinToString { it.title }
+                )
+            }
+        )
+    }
+
     sealed interface Navigation {
         data object RecipeDeleted : Navigation
+    }
+
+    sealed class State {
+        abstract val title: String
+
+        data object Loading : State() {
+            override val title: String = "Loading"
+        }
+
+        data class Content(
+            override val title: String,
+            val headerImageUrl: String?,
+            val description: String,
+            val ingredients: List<String>,
+            val steps: List<StepItemVO>,
+        ) : State()
     }
 }

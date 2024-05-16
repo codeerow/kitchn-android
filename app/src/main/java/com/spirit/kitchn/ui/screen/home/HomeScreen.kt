@@ -22,9 +22,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.spirit.kitchn.core.product.model.ProductDTO
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.item.ProductItem
+import com.spirit.kitchn.ui.component.item.product.ProductItem
+import com.spirit.kitchn.ui.component.item.product.ProductItemVO
 import com.spirit.kitchn.ui.theme.KTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +34,7 @@ fun HomeScreen(
     onShowAllRecipesClicked: () -> Unit,
     onShowAvailableRecipesClicked: () -> Unit,
     onItemClicked: (String) -> Unit,
-    products: List<ProductDTO>,
+    products: List<ProductItemVO>,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -67,7 +67,7 @@ fun HomeScreen(
 
 @Composable
 private fun ProductList(
-    products: List<ProductDTO>,
+    products: List<ProductItemVO>,
     modifier: Modifier,
     onItemClick: (String) -> Unit,
 ) {
@@ -136,13 +136,13 @@ private fun HomeScreenPreview() {
     KTheme {
         HomeScreen(
             products = listOf(
-                ProductDTO(
-                    barcode = "123",
+                ProductItemVO(
+                    imageUrl = "123",
                     name = "321",
                     id = "",
                 ),
-                ProductDTO(
-                    barcode = "das",
+                ProductItemVO(
+                    imageUrl = "das",
                     name = "fds",
                     id = "",
                 )

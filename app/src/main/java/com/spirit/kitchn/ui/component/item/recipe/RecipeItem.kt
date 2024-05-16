@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.component.item
+package com.spirit.kitchn.ui.component.item.recipe
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,11 +18,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.spirit.kitchn.R
-import com.spirit.kitchn.core.recipe.model.RecipeDTO
 
 @Composable
 fun RecipeItem(
-    item: RecipeDTO,
+    item: RecipeItemVO,
     isPreview: Boolean = false,
     onItemClicked: (String) -> Unit,
 ) {
@@ -46,7 +45,7 @@ fun RecipeItem(
                     alignment = Alignment.Center,
                 )
             } else {
-                item.preview?.url?.let { preview ->
+                item.imageUrl?.let { preview ->
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(preview)

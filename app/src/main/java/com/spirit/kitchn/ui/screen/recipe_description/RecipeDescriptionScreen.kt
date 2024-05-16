@@ -30,23 +30,22 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.spirit.kitchn.R
-import com.spirit.kitchn.core.recipe.model.Image
-import com.spirit.kitchn.core.recipe.model.RecipeDTO
 import com.spirit.kitchn.ui.component.KButton
+import com.spirit.kitchn.ui.screen.recipe_description.model.StepItemVO
 import com.spirit.kitchn.ui.theme.KTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDescriptionScreen(
-    recipe: RecipeDTO?,
+    state: RecipeDescriptionViewModel.State,
     onDeleteClicked: () -> Unit,
     isPreview: Boolean = false,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(recipe?.name ?: "Loading") })
+            TopAppBar(title = { Text(state.title) })
         }
     ) { padding ->
         Column(
@@ -54,45 +53,47 @@ fun RecipeDescriptionScreen(
                 .padding(padding)
                 .fillMaxSize(),
         ) {
-            if (recipe == null) {
-                Box(
+            when (state) {
+                RecipeDescriptionViewModel.State.Loading -> Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxSize(),
                 ) {
                     CircularProgressIndicator()
                 }
-            } else {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                ) {
-                    HeaderImage(
-                        image = recipe.preview,
-                        isPreview = isPreview,
+
+                is RecipeDescriptionViewModel.State.Content -> {
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.Gray),
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = recipe.description,
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
+                    ) {
+                        HeaderImage(
+                            imageUrl = state.headerImageUrl,
+                            isPreview = isPreview,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.Gray),
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = state.description,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                        IngredientsSection(items = state.ingredients)
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                        StepsSection(items = state.steps)
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
-                    IngredientsSection(items = recipe.ingredients)
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    StepsSection(items = recipe.steps)
+                    DeleteButton(
+                        onDeleteClicked = onDeleteClicked,
+                    )
+                    Spacer(modifier = Modifier.height(26.dp))
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-                DeleteButton(
-                    onDeleteClicked = onDeleteClicked,
-                )
-                Spacer(modifier = Modifier.height(26.dp))
             }
         }
     }
@@ -101,7 +102,7 @@ fun RecipeDescriptionScreen(
 
 @Composable
 private fun IngredientsSection(
-    items: List<RecipeDTO.ProductFamilyDTO>,
+    items: List<String>,
 ) {
     Text(
         text = "Ingredients",
@@ -116,7 +117,7 @@ private fun IngredientsSection(
     } else {
         items.forEach {
             Text(
-                text = it.title,
+                text = it,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
@@ -125,7 +126,7 @@ private fun IngredientsSection(
 
 @Composable
 private fun StepsSection(
-    items: List<RecipeDTO.StepDTO>,
+    items: List<StepItemVO>,
 ) {
     Text(
         text = "Steps",
@@ -138,13 +139,13 @@ private fun StepsSection(
             modifier = Modifier.padding(horizontal = 16.dp),
         )
     } else {
-        items.forEachIndexed { index, stepDTO ->
+        items.forEachIndexed { index, step ->
             Text(
-                text = "${index.plus(1)}. ${stepDTO.description}",
+                text = "${index.plus(1)}. ${step.description}",
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Text(
-                text = "Ingredients: ${stepDTO.productFamilies.joinToString { it.title }}",
+                text = "Ingredients: ${step.ingredients}",
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -154,7 +155,7 @@ private fun StepsSection(
 
 @Composable
 private fun HeaderImage(
-    image: Image?,
+    imageUrl: String?,
     isPreview: Boolean,
     modifier: Modifier,
 ) {
@@ -166,7 +167,7 @@ private fun HeaderImage(
             modifier = modifier,
         )
     } else {
-        image?.url?.let { preview ->
+        imageUrl?.let { preview ->
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(preview)
@@ -200,7 +201,7 @@ private fun DeleteButton(
 private fun RecipeDescriptionScreenPreview_loading() {
     KTheme {
         RecipeDescriptionScreen(
-            recipe = null,
+            state = RecipeDescriptionViewModel.State.Loading,
             onDeleteClicked = {},
             isPreview = true,
         )
@@ -212,30 +213,17 @@ private fun RecipeDescriptionScreenPreview_loading() {
 private fun RecipeDescriptionScreenPreview() {
     KTheme {
         RecipeDescriptionScreen(
-            recipe = RecipeDTO(
-                id = "",
-                name = "Name",
+            state = RecipeDescriptionViewModel.State.Content(
+                title = "Name",
                 description = "Description",
-                images = listOf(),
+                headerImageUrl = null,
                 steps = listOf(
-                    RecipeDTO.StepDTO(
-                        id = "",
+                    StepItemVO(
                         description = "desc",
-                        productFamilies = listOf(
-                            RecipeDTO.ProductFamilyDTO(
-                                id = "ingredient",
-                                title = "asd",
-                                description = "asd",
-                            ),
-                            RecipeDTO.ProductFamilyDTO(
-                                id = "ingredient 2",
-                                title = "asd",
-                                description = "asd",
-                            ),
-//                        preview = null,
-                        ),
+                        ingredients = "",
                     ),
                 ),
+                ingredients = listOf("321", "123")
             ),
             onDeleteClicked = {},
             isPreview = true,
