@@ -40,7 +40,6 @@ import com.spirit.kitchn.ui.theme.KTheme
 @Composable
 fun RecipeDescriptionScreen(
     recipe: RecipeDTO?,
-    onStartCookingClicked: () -> Unit,
     onDeleteClicked: () -> Unit,
     isPreview: Boolean = false,
 ) {
@@ -84,14 +83,14 @@ fun RecipeDescriptionScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
                     IngredientsSection(items = recipe.ingredients)
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    StepsSection(items = recipe.steps)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 DeleteButton(
                     onDeleteClicked = onDeleteClicked,
-                )
-                StartCookingButton(
-                    onStartCookingClicked = onStartCookingClicked,
                 )
                 Spacer(modifier = Modifier.height(26.dp))
             }
@@ -125,6 +124,35 @@ private fun IngredientsSection(
 }
 
 @Composable
+private fun StepsSection(
+    items: List<RecipeDTO.StepDTO>,
+) {
+    Text(
+        text = "Steps",
+        fontSize = 20.sp,
+        modifier = Modifier.padding(horizontal = 16.dp),
+    )
+    if (items.isEmpty()) {
+        Text(
+            text = "This recipe has no steps",
+            modifier = Modifier.padding(horizontal = 16.dp),
+        )
+    } else {
+        items.forEachIndexed { index, stepDTO ->
+            Text(
+                text = "${index.plus(1)}. ${stepDTO.description}",
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Text(
+                text = "Ingredients: ${stepDTO.productFamilies.joinToString { it.title }}",
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
 private fun HeaderImage(
     image: Image?,
     isPreview: Boolean,
@@ -153,20 +181,6 @@ private fun HeaderImage(
 }
 
 @Composable
-private fun StartCookingButton(
-    onStartCookingClicked: () -> Unit,
-) {
-    KButton(
-        onClick = onStartCookingClicked,
-        modifier = Modifier
-            .testTag("buttonStartCooking")
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
-        label = "Start Cooking"
-    )
-}
-
-@Composable
 private fun DeleteButton(
     onDeleteClicked: () -> Unit,
 ) {
@@ -187,7 +201,6 @@ private fun RecipeDescriptionScreenPreview_loading() {
     KTheme {
         RecipeDescriptionScreen(
             recipe = null,
-            onStartCookingClicked = {},
             onDeleteClicked = {},
             isPreview = true,
         )
@@ -224,7 +237,6 @@ private fun RecipeDescriptionScreenPreview() {
                     ),
                 ),
             ),
-            onStartCookingClicked = {},
             onDeleteClicked = {},
             isPreview = true,
         )

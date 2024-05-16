@@ -263,7 +263,6 @@ internal fun NavigationGraph() {
 
             RecipeDescriptionScreen(
                 recipe = recipe,
-                onStartCookingClicked = {},
                 onDeleteClicked = viewModel::deleteRecipe,
             )
         }
