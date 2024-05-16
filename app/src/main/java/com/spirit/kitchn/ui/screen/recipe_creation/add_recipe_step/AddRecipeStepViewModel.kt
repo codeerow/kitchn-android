@@ -17,7 +17,7 @@ class AddRecipeStepViewModel(
     val ingredients = MutableStateFlow("")
     val description = MutableStateFlow("")
     val preview = MutableStateFlow<PhotoItem.Photo?>(null)
-    
+
     fun createRecipe() {
         val step = CreateRecipeUseCase.Request.Step(
             description = description.value,

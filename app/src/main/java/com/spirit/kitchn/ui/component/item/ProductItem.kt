@@ -41,15 +41,13 @@ fun ProductItem(
     ) {
         Row(
             modifier = modifier
-                .padding(16.dp)
         ) {
             AsyncImage(
                 model = product.imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(80.dp)
-                    .padding(3.dp)
+                    .size(140.dp)
                     .clip(RoundedCornerShape(20.dp))
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -59,7 +57,8 @@ fun ProductItem(
                 Text(
                     text = product.name,
                     fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(all = 8.dp)
                 )
                 Spacer(modifier = Modifier.height(4.dp))
             }

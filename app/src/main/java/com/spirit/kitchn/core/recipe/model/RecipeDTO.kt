@@ -12,14 +12,21 @@ data class RecipeDTO(
 ) {
 
     val preview: Image? = images.getOrNull(0)
-    val ingredients = steps.flatMap { it.ingredients }
+    val ingredients = steps.flatMap { it.productFamilies }
 
     @Serializable
     data class StepDTO(
         val id: String,
         val description: String,
-        val ingredients: List<String>,
-        val preview: Image?,
+        val productFamilies: List<ProductFamilyDTO> = listOf(), // TODO: rename to ingredients both here and on the server
+//        val preview: Image?,
+    )
+
+    @Serializable
+    data class ProductFamilyDTO(
+        val id: String,
+        val title: String,
+        val description: String,
     )
 }
 

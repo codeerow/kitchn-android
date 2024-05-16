@@ -51,6 +51,7 @@ fun RecipesScreen(
                 isPreview = isPreview,
                 recipes = recipes,
             )
+            Spacer(modifier = Modifier.height(16.dp))
             AddRecipeButton(onAddRecipeClicked = onAddRecipeClicked)
 
             Spacer(modifier = Modifier.height(26.dp))

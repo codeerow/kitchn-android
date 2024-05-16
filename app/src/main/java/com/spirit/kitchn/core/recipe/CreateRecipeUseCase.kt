@@ -68,7 +68,7 @@ class CreateRecipeUseCase(
         @Serializable
         data class Step(
             var description: String = "",
-            var ingredients: List<String> = listOf(),
+            var ingredients: List<String> = listOf(), // TODO: rename to ingredients both here and on the server
 //            var preview: Uri? = null,
         )
     }
