@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.spirit.kitchn.core.auth.repo.TokenRepo
 import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
 import com.spirit.kitchn.ui.screen.add_product.AddProductScreen
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
@@ -32,6 +33,7 @@ import com.spirit.kitchn.ui.screen.welcome.WelcomeViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.compose.navigation.koinNavViewModel
+import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
 
 /* ROUTES */
@@ -53,10 +55,11 @@ internal const val PRODUCT_NOT_FOUND_ROUTE = "PRODUCT_NOT_FOUND_ROUTE/{$BARCODE_
 @Composable
 internal fun NavigationGraph() {
     val rootController = rememberNavController()
+    val tokenRepo = koinInject<TokenRepo>()
 
     NavHost(
         navController = rootController,
-        startDestination = WELCOME_ROUTE,
+        startDestination = if (tokenRepo.accessToken.isBlank()) WELCOME_ROUTE else HOME_ROUTE,
         enterTransition = { screenSlideIn() },
         exitTransition = { screenFadeOut() },
         popEnterTransition = { screenFadeIn() },

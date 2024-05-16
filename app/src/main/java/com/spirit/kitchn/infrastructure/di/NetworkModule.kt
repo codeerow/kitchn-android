@@ -38,7 +38,7 @@ private fun buildClient(tokenRepo: TokenRepo) = HttpClient(Android) {
         level = LogLevel.ALL
         logger = object : Logger {
             override fun log(message: String) {
-                Log.d("Auth Client", message) // todo: probably improve in the future
+                Log.d("Http Client", message)
             }
         }
     }
