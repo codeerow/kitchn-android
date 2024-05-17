@@ -4,18 +4,20 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.spirit.kitchn.core.recipe.CreateRecipeUseCase
+import com.spirit.kitchn.infrastructure.navigation.ADD_STEP_RECIPE_ROUTE
+import com.spirit.kitchn.infrastructure.navigation.RECIPES_ROUTE
 import com.spirit.kitchn.ui.component.PhotoItem
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class CreateRecipeViewModel(
     private val createRecipeUseCase: CreateRecipeUseCase,
     private val recipeCreationRequest: CreateRecipeUseCase.Request,
+    private val navHostController: NavHostController,
     private val onCleared: () -> Unit,
 ) : ViewModel() {
-    val navigation = MutableSharedFlow<Navigation>()
     val name = MutableStateFlow("")
     val description = MutableStateFlow("")
     val preview = MutableStateFlow<PhotoItem.Photo?>(null)
@@ -28,7 +30,10 @@ class CreateRecipeViewModel(
                 previewImage = preview.value?.url?.toUri(),
             )
             createRecipeUseCase.execute(request)
-            navigation.emit(Navigation.RecipeCreated)
+            navHostController.popBackStack(
+                route = RECIPES_ROUTE,
+                inclusive = false,
+            )
         }
     }
 
@@ -48,17 +53,12 @@ class CreateRecipeViewModel(
             recipeCreationRequest.name = name.value
             recipeCreationRequest.description = description.value
             recipeCreationRequest.previewImage = preview.value?.url?.toUri()
-            navigation.emit(Navigation.AddRecipeStep)
+            navHostController.navigate(ADD_STEP_RECIPE_ROUTE)
         }
     }
 
     override fun onCleared() {
         super.onCleared()
         onCleared.invoke()
-    }
-
-    sealed interface Navigation {
-        data object AddRecipeStep : Navigation
-        data object RecipeCreated : Navigation
     }
 }

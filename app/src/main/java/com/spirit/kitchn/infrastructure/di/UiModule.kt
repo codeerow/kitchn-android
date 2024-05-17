@@ -14,6 +14,7 @@ val uiModule = module {
     viewModel {
         WelcomeViewModel(
             loginUseCase = get(),
+            navHostController = get(),
         )
     }
     viewModel {
@@ -21,6 +22,7 @@ val uiModule = module {
             getMyProductsUseCase = get(),
             addProductUseCase = get(),
             deleteProductUseCase = get(),
+            navHostController = get(),
         )
     }
 
@@ -43,6 +45,7 @@ val uiModule = module {
         AddRecipeStepViewModel(
             createRecipeUseCase = get(),
             recipeCreationRequest = creationScope.get(),
+            navHostController = get(),
         )
     }
 
@@ -52,7 +55,8 @@ val uiModule = module {
         CreateRecipeViewModel(
             createRecipeUseCase = get(),
             recipeCreationRequest = creationScope.get(),
-            onCleared = { creationScope.close() }
+            onCleared = { creationScope.close() },
+            navHostController = get(),
         )
     }
 
@@ -61,6 +65,7 @@ val uiModule = module {
             recipeIdArg = recipeIdArg,
             getRecipeDescriptionUseCase = get(),
             deleteRecipeUseCase = get(),
+            navHostController = get(),
         )
     }
 }

@@ -32,7 +32,6 @@ import com.spirit.kitchn.ui.theme.KTheme
 fun HomeScreen(
     onAddProductClicked: () -> Unit,
     onShowAllRecipesClicked: () -> Unit,
-    onShowAvailableRecipesClicked: () -> Unit,
     onItemClicked: (String) -> Unit,
     products: List<ProductItemVO>,
 ) {
@@ -57,7 +56,6 @@ fun HomeScreen(
             )
 
             ShowAllRecipeButton(onClick = onShowAllRecipesClicked)
-            ShowAvailableRecipeButton(onClick = onShowAvailableRecipesClicked)
             AddProductButton(onClick = onAddProductClicked)
 
             Spacer(modifier = Modifier.height(26.dp))
@@ -107,18 +105,6 @@ private fun AddProductButton(onClick: () -> Unit) {
 }
 
 @Composable
-private fun ShowAvailableRecipeButton(onClick: () -> Unit) {
-    KButton(
-        onClick = onClick,
-        modifier = Modifier
-            .testTag("seeAvailableRecipes")
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
-        label = "See Available Recipes"
-    )
-}
-
-@Composable
 private fun ShowAllRecipeButton(onClick: () -> Unit) {
     KButton(
         onClick = onClick,
@@ -150,7 +136,6 @@ private fun HomeScreenPreview() {
             onAddProductClicked = {},
             onItemClicked = {},
             onShowAllRecipesClicked = {},
-            onShowAvailableRecipesClicked = {},
         )
     }
 }

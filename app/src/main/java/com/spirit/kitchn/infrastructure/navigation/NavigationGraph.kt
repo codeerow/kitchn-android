@@ -1,20 +1,18 @@
 package com.spirit.kitchn.infrastructure.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.spirit.kitchn.core.auth.repo.TokenRepo
-import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
 import com.spirit.kitchn.ui.screen.add_product.AddProductScreen
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
 import com.spirit.kitchn.ui.screen.error.ErrorScreen
@@ -30,8 +28,6 @@ import com.spirit.kitchn.ui.screen.recipes.RecipesScreen
 import com.spirit.kitchn.ui.screen.recipes.RecipesViewModel
 import com.spirit.kitchn.ui.screen.welcome.WelcomeScreen
 import com.spirit.kitchn.ui.screen.welcome.WelcomeViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 import org.koin.core.parameter.parametersOf
@@ -42,24 +38,28 @@ internal const val HOME_ROUTE = "HOME_ROUTE"
 internal const val RECIPES_ROUTE = "RECIPES_ROUTE"
 internal const val CREATE_RECIPE_ROUTE = "ADD_RECIPE_ROUTE"
 internal const val ADD_STEP_RECIPE_ROUTE = "ADD_STEP_RECIPE_ROUTE"
-internal const val SCAN_ERROR_ROUTE = "SCAN_ERROR_ROUTE"
 
-internal const val RECIPE_ID_ARG = "recipe_id"
+internal const val ERROR_DESCRIPTION_ARG = "ERROR_DESCRIPTION_ARG"
+internal const val ERROR_ROUTE = "ERROR_ROUTE/{$ERROR_DESCRIPTION_ARG}"
+
+internal const val RECIPE_ID_ARG = "RECIPE_ID_ARG"
 internal const val RECIPE_DESCRIPTION_ROUTE = "RECIPE_DESCRIPTION_ROUTE/{$RECIPE_ID_ARG}"
 
-internal const val BARCODE_ARG = "barcode"
+internal const val BARCODE_ARG = "BARCODE_ARG"
 internal const val PRODUCT_NOT_FOUND_ROUTE = "PRODUCT_NOT_FOUND_ROUTE/{$BARCODE_ARG}"
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun NavigationGraph() {
-    val rootController = rememberNavController()
+    val rootController = koinInject<NavHostController>()
     val tokenRepo = koinInject<TokenRepo>()
+
+    val startDestination = if (tokenRepo.accessToken.isBlank()) WELCOME_ROUTE else HOME_ROUTE
 
     NavHost(
         navController = rootController,
-        startDestination = if (tokenRepo.accessToken.isBlank()) WELCOME_ROUTE else HOME_ROUTE,
+        startDestination = startDestination,
         enterTransition = { screenSlideIn() },
         exitTransition = { screenFadeOut() },
         popEnterTransition = { screenFadeIn() },
@@ -73,12 +73,6 @@ internal fun NavigationGraph() {
             val viewModel: WelcomeViewModel = koinNavViewModel()
             val email by viewModel.email.collectAsState()
             val password by viewModel.password.collectAsState()
-
-            LaunchedEffect(key1 = Unit) {
-                viewModel.onNavigateNext
-                    .onEach { rootController.navigate(HOME_ROUTE) }
-                    .collect()
-            }
 
             WelcomeScreen(
                 email = email,
@@ -112,10 +106,13 @@ internal fun NavigationGraph() {
         }
 
         composable(
-            route = SCAN_ERROR_ROUTE,
-        ) {
+            route = ERROR_ROUTE,
+            arguments = listOf(navArgument(ERROR_DESCRIPTION_ARG) { type = NavType.StringType })
+        ) { backStackEntry ->
+            val errorDescriptionArg = backStackEntry.arguments?.getString(BARCODE_ARG) ?: ""
+
             ErrorScreen(
-                title = "Error during scanning",
+                title = errorDescriptionArg,
                 onBackClick = { rootController.navigateUp() },
             )
         }
@@ -126,30 +123,11 @@ internal fun NavigationGraph() {
             val viewModel: HomeViewModel = koinNavViewModel()
             val products by viewModel.products.collectAsState()
 
-            LaunchedEffect(key1 = Unit) {
-                viewModel.navigation
-                    .onEach {
-                        when (it) {
-                            is AddProductUseCase.Result.Failure.ProductNotFound -> rootController.navigate(
-                                PRODUCT_NOT_FOUND_ROUTE.replace("{$BARCODE_ARG}", it.barcode)
-                            )
-
-                            AddProductUseCase.Result.Failure.ScanFailed -> rootController.navigate(
-                                SCAN_ERROR_ROUTE
-                            )
-
-                            AddProductUseCase.Result.Success -> {}
-                        }
-                    }
-                    .collect()
-            }
-
             HomeScreen(
                 products = products,
                 onAddProductClicked = viewModel::onAddProductClicked,
                 onItemClicked = viewModel::onDeleteProductClicked,
                 onShowAllRecipesClicked = { rootController.navigate(RECIPES_ROUTE) },
-                onShowAvailableRecipesClicked = {},
             )
         }
 
@@ -178,21 +156,6 @@ internal fun NavigationGraph() {
             val description by viewModel.description.collectAsState()
             val preview by viewModel.preview.collectAsState()
 
-            LaunchedEffect(key1 = Unit) {
-                viewModel.navigation.onEach {
-                    when (it) {
-                        CreateRecipeViewModel.Navigation.AddRecipeStep -> rootController.navigate(
-                            ADD_STEP_RECIPE_ROUTE
-                        )
-
-                        CreateRecipeViewModel.Navigation.RecipeCreated -> rootController.popBackStack(
-                            route = RECIPES_ROUTE,
-                            inclusive = false,
-                        )
-                    }
-                }.collect()
-            }
-
             CreateRecipeScreen(
                 name = name,
                 onNameChanged = viewModel.name::tryEmit,
@@ -213,21 +176,6 @@ internal fun NavigationGraph() {
             val description by viewModel.description.collectAsState()
             val ingredients by viewModel.ingredients.collectAsState()
             val preview by viewModel.preview.collectAsState()
-
-            LaunchedEffect(key1 = Unit) {
-                viewModel.navigation.onEach {
-                    when (it) {
-                        AddRecipeStepViewModel.Navigation.AddRecipeStep -> rootController.navigate(
-                            ADD_STEP_RECIPE_ROUTE
-                        )
-
-                        AddRecipeStepViewModel.Navigation.RecipeCreated -> rootController.popBackStack(
-                            route = RECIPES_ROUTE,
-                            inclusive = false,
-                        )
-                    }
-                }.collect()
-            }
 
             AddRecipeStepScreen(
                 onCreateRecipeClicked = viewModel::createRecipe,
@@ -252,17 +200,6 @@ internal fun NavigationGraph() {
             }
 
             val state by viewModel.state.collectAsState()
-
-            LaunchedEffect(key1 = Unit) {
-                viewModel.navigation.onEach {
-                    when (it) {
-                        RecipeDescriptionViewModel.Navigation.RecipeDeleted -> rootController.popBackStack(
-                            route = RECIPES_ROUTE,
-                            inclusive = false,
-                        )
-                    }
-                }.collect()
-            }
 
             RecipeDescriptionScreen(
                 state = state,

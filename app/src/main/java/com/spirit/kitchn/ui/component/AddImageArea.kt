@@ -80,7 +80,7 @@ fun AddImageArea(
             // Permission is granted, proceed to step 2
             val tmpUri = getTempUri()
             tempUri.value = tmpUri
-            takePhotoLauncher.launch(tempUri.value)
+            tempUri.value?.let(takePhotoLauncher::launch)
         } else {
             // Permission is denied, handle it accordingly
         }
@@ -104,7 +104,7 @@ fun AddImageArea(
                     // Permission is already granted, proceed to step 2
                     val tmpUri = getTempUri()
                     tempUri.value = tmpUri
-                    takePhotoLauncher.launch(tempUri.value)
+                    tempUri.value?.let(takePhotoLauncher::launch)
                 } else {
                     // Permission is not granted, request it
                     cameraPermissionLauncher.launch(permission)

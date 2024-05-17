@@ -18,7 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -56,11 +56,11 @@ fun PhotosGrid(
     onSetUri: (Uri) -> Unit = {},
 ) {
     val state = rememberLazyGridState()
-    val autoScrollSpeed = remember { mutableStateOf(0f) }
-    LaunchedEffect(autoScrollSpeed.value) {
-        if (autoScrollSpeed.value != 0f) {
+    val autoScrollSpeed = remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(autoScrollSpeed.floatValue) {
+        if (autoScrollSpeed.floatValue != 0f) {
             while (isActive) {
-                state.scrollBy(autoScrollSpeed.value)
+                state.scrollBy(autoScrollSpeed.floatValue)
                 delay(10)
             }
         }

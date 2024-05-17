@@ -2,11 +2,12 @@ package com.spirit.kitchn.ui.screen.recipe_description
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.spirit.kitchn.core.recipe.DeleteRecipeUseCase
 import com.spirit.kitchn.core.recipe.GetRecipeDescriptionUseCase
 import com.spirit.kitchn.core.recipe.model.RecipeDTO
+import com.spirit.kitchn.infrastructure.navigation.RECIPES_ROUTE
 import com.spirit.kitchn.ui.screen.recipe_description.model.StepItemVO
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,10 +15,9 @@ import kotlinx.coroutines.launch
 class RecipeDescriptionViewModel(
     private val recipeIdArg: String,
     private val deleteRecipeUseCase: DeleteRecipeUseCase,
+    private val navHostController: NavHostController,
     getRecipeDescriptionUseCase: GetRecipeDescriptionUseCase,
 ) : ViewModel() {
-
-    val navigation = MutableSharedFlow<Navigation>()
 
     private val _state = MutableStateFlow<State>(State.Loading)
     val state: StateFlow<State> = _state
@@ -32,7 +32,10 @@ class RecipeDescriptionViewModel(
     fun deleteRecipe() {
         viewModelScope.launch {
             deleteRecipeUseCase.execute(recipeId = recipeIdArg)
-            navigation.emit(Navigation.RecipeDeleted)
+            navHostController.popBackStack(
+                route = RECIPES_ROUTE,
+                inclusive = false,
+            )
         }
     }
 
@@ -49,10 +52,6 @@ class RecipeDescriptionViewModel(
                 )
             }
         )
-    }
-
-    sealed interface Navigation {
-        data object RecipeDeleted : Navigation
     }
 
     sealed class State {
