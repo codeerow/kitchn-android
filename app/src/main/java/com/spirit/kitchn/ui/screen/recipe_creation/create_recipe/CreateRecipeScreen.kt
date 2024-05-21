@@ -22,9 +22,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.AddImageArea
-import com.spirit.kitchn.ui.component.ImageItem
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.PhotoItem
+import com.spirit.kitchn.ui.component.photos_grid.ImageItem
+import com.spirit.kitchn.ui.component.photos_grid.PhotoItem
 import com.spirit.kitchn.ui.theme.KTheme
 import java.io.File
 
@@ -38,7 +38,7 @@ fun CreateRecipeScreen(
     description: String,
     onNameChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
-    photo: PhotoItem.Photo?,
+    photo: PhotoItem,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -53,22 +53,22 @@ fun CreateRecipeScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (photo == null) {
-                AddImageArea(
+            when (photo) {
+                is PhotoItem.Photo -> ImageItem(
+                    photo = photo,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                        .fillMaxWidth(),
+                )
+
+                PhotoItem.AddPhotoItem -> AddImageArea(
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                         .fillMaxWidth(),
                     directory = File(LocalContext.current.cacheDir, "images"),
                     onSetUri = onUpdateAsset,
-                )
-            } else {
-                ImageItem(
-                    photo = photo,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 16.dp, vertical = 16.dp)
-                        .fillMaxWidth(),
                 )
             }
             Text(
@@ -164,7 +164,7 @@ private fun CreateRecipeScreenPreview_withoutPhoto() {
             description = "",
             onAddRecipeStepClicked = {},
             onDescriptionChanged = {},
-            photo = null,
+            photo = PhotoItem.AddPhotoItem,
         )
     }
 }

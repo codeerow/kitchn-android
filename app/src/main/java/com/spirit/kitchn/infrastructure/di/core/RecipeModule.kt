@@ -9,6 +9,7 @@ import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeVie
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.scope.Scope
 import org.koin.core.scope.ScopeCallback
@@ -57,6 +58,6 @@ val recipeModule = module {
     }
 
     scope<CreateRecipeViewModel> {
-        scoped { CreateRecipeUseCase.Request() }
+        scoped { MutableStateFlow(CreateRecipeUseCase.Request()) }
     }
 }

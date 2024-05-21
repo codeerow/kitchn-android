@@ -12,11 +12,10 @@ import io.ktor.http.ContentType
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
-import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 class CreateRecipeUseCase(
     private val dataSource: RecipeDataSource,
@@ -63,13 +62,12 @@ class CreateRecipeUseCase(
         var name: String = "",
         var previewImage: Uri? = null,
         var description: String = "",
-        var steps: List<Step> = listOf(),
+        var steps: MutableList<Step> = mutableListOf(),
     ) {
-        @Serializable
         data class Step(
             var description: String = "",
             var ingredients: List<String> = listOf(), // TODO: rename to ingredients both here and on the server
-//            var preview: Uri? = null,
+            var preview: Uri? = null,
         )
     }
 }

@@ -5,7 +5,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spirit.kitchn.core.product.AddProductManuallyUseCase
-import com.spirit.kitchn.ui.component.PhotoItem
+import com.spirit.kitchn.ui.component.photos_grid.PhotoItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 

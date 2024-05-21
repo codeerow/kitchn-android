@@ -3,45 +3,57 @@ package com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.spirit.kitchn.core.recipe.CreateRecipeUseCase
-import com.spirit.kitchn.infrastructure.navigation.ADD_STEP_RECIPE_ROUTE
-import com.spirit.kitchn.infrastructure.navigation.RECIPES_ROUTE
-import com.spirit.kitchn.ui.component.PhotoItem
+import com.spirit.kitchn.infrastructure.navigation.AppCoordinator
+import com.spirit.kitchn.ui.component.photos_grid.PhotoItem
+import com.spirit.kitchn.utils.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class AddRecipeStepViewModel(
-    private val recipeCreationRequest: CreateRecipeUseCase.Request,
+    private val curStepNumber: Int,
+    private val coordinator: AppCoordinator,
     private val createRecipeUseCase: CreateRecipeUseCase,
-    private val navHostController: NavHostController,
+    private val request: MutableStateFlow<CreateRecipeUseCase.Request>,
 ) : ViewModel() {
-    val ingredients = MutableStateFlow("")
-    val description = MutableStateFlow("")
-    val preview = MutableStateFlow<PhotoItem.Photo?>(null)
+
+    init {
+        viewModelScope.launch {
+            request.emit(
+                request.value.copy(
+                    steps = request.value.steps.apply {
+                        add(curStepNumber, CreateRecipeUseCase.Request.Step())
+                    }
+                )
+            )
+        }
+    }
+
+    val description = request.map(viewModelScope) { it.steps[curStepNumber].description }
+    val ingredients = request.map(viewModelScope) {
+        it.steps[curStepNumber].ingredients.firstOrNull() ?: ""
+    }
+    val preview = request.map(viewModelScope) {
+        it.steps[curStepNumber].preview?.let {
+            PhotoItem.Photo(url = it.toString())
+        } ?: PhotoItem.AddPhotoItem
+    }
 
     fun createRecipe() {
-        val step = CreateRecipeUseCase.Request.Step(
-            description = description.value,
-            ingredients = listOf(ingredients.value),
-        )
-        recipeCreationRequest.steps = mutableListOf(step) + recipeCreationRequest.steps
-
         viewModelScope.launch {
-            createRecipeUseCase.execute(recipeCreationRequest)
-            navHostController.popBackStack(
-                route = RECIPES_ROUTE,
-                inclusive = false,
-            )
+            createRecipeUseCase.execute(request.value)
+            coordinator.navigateBackToRecipes()
         }
     }
 
     fun addPreview(uri: Uri) {
         viewModelScope.launch {
-            preview.emit(
-                PhotoItem.Photo(
-                    id = (0..Int.MAX_VALUE).random(),
-                    url = uri.toString(),
+            request.emit(
+                request.value.copy(
+                    steps = request.value.steps.apply {
+                        getOrNull(curStepNumber) ?: return@apply
+                        this[curStepNumber] = this[curStepNumber].copy(preview = uri)
+                    }
                 )
             )
         }
@@ -49,12 +61,45 @@ class AddRecipeStepViewModel(
 
     fun addRecipeStep() {
         viewModelScope.launch {
-            val step = CreateRecipeUseCase.Request.Step(
-                description = description.value,
-                ingredients = listOf(ingredients.value),
+            coordinator.navigateToNextStepCreation(curStepNumber)
+        }
+    }
+
+    fun onBackPressed() {
+        viewModelScope.launch {
+            request.emit(
+                request.value.copy(
+                    steps = request.value.steps.apply {
+                        removeAt(curStepNumber)
+                    }
+                )
             )
-            recipeCreationRequest.steps = mutableListOf(step) + recipeCreationRequest.steps
-            navHostController.navigate(ADD_STEP_RECIPE_ROUTE)
+            coordinator.navigateBackward()
+        }
+    }
+
+    fun changeIngredients(ingredients: String) {
+        viewModelScope.launch {
+            request.emit(
+                request.value.copy(
+                    steps = request.value.steps.toMutableList().apply {
+                        this[curStepNumber] =
+                            this[curStepNumber].copy(ingredients = listOf(ingredients))
+                    }
+                )
+            )
+        }
+    }
+
+    fun changeDescription(description: String) {
+        viewModelScope.launch {
+            request.emit(
+                request.value.copy(
+                    steps = request.value.steps.toMutableList().apply {
+                        this[curStepNumber] = this[curStepNumber].copy(description = description)
+                    }
+                )
+            )
         }
     }
 }

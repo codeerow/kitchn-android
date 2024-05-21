@@ -37,7 +37,9 @@ internal const val WELCOME_ROUTE = "WELCOME_ROUTE"
 internal const val HOME_ROUTE = "HOME_ROUTE"
 internal const val RECIPES_ROUTE = "RECIPES_ROUTE"
 internal const val CREATE_RECIPE_ROUTE = "ADD_RECIPE_ROUTE"
-internal const val ADD_STEP_RECIPE_ROUTE = "ADD_STEP_RECIPE_ROUTE"
+
+internal const val CURRENT_STEP_NUMBER_ARG = "CURRENT_STEP_NUMBER_ARG"
+internal const val ADD_STEP_RECIPE_ROUTE = "ADD_STEP_RECIPE_ROUTE/{$CURRENT_STEP_NUMBER_ARG}"
 
 internal const val ERROR_DESCRIPTION_ARG = "ERROR_DESCRIPTION_ARG"
 internal const val ERROR_ROUTE = "ERROR_ROUTE/{$ERROR_DESCRIPTION_ARG}"
@@ -158,17 +160,21 @@ internal fun NavigationGraph() {
                 photo = preview,
                 description = description,
                 onUpdateAsset = viewModel::addPreview,
-                onNameChanged = viewModel.name::tryEmit,
+                onNameChanged = viewModel::changeName,
                 onCreateRecipeClicked = viewModel::createRecipe,
                 onAddRecipeStepClicked = viewModel::addRecipeStep,
-                onDescriptionChanged = viewModel.description::tryEmit,
+                onDescriptionChanged = viewModel::changeDescription,
             )
         }
 
         composable(
             route = ADD_STEP_RECIPE_ROUTE,
-        ) {
-            val viewModel: AddRecipeStepViewModel = koinNavViewModel()
+            arguments = listOf(navArgument(CURRENT_STEP_NUMBER_ARG) { type = NavType.StringType })
+        ) { backStackEntry ->
+            val currentStepNumber = backStackEntry.arguments?.getInt(CURRENT_STEP_NUMBER_ARG) ?: -1
+
+            val viewModel: AddRecipeStepViewModel =
+                koinNavViewModel { parametersOf(currentStepNumber) }
 
             val preview by viewModel.preview.collectAsState()
             val description by viewModel.description.collectAsState()
@@ -181,8 +187,9 @@ internal fun NavigationGraph() {
                 onUpdateAsset = viewModel::addPreview,
                 onCreateRecipeClicked = viewModel::createRecipe,
                 onAddRecipeStepClicked = viewModel::addRecipeStep,
-                onIngredientChanged = viewModel.ingredients::tryEmit,
-                onDescriptionChanged = viewModel.description::tryEmit,
+                onIngredientChanged = viewModel::changeIngredients,
+                onDescriptionChanged = viewModel::changeDescription,
+                onBackPressed = viewModel::onBackPressed,
             )
         }
 

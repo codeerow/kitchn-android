@@ -1,6 +1,7 @@
 package com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.AddImageArea
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.PhotoItem
+import com.spirit.kitchn.ui.component.photos_grid.PhotoItem
 import com.spirit.kitchn.ui.theme.KTheme
 import java.io.File
 
@@ -35,10 +36,12 @@ fun AddRecipeStepScreen(
     onAddRecipeStepClicked: () -> Unit,
     description: String,
     ingredients: String,
+    onBackPressed: () -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onIngredientChanged: (String) -> Unit,
-    photo: PhotoItem.Photo?,
+    photo: PhotoItem,
 ) {
+    BackHandler { onBackPressed() }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -135,7 +138,8 @@ private fun AddRecipeStepScreenPreview_withoutPhoto() {
             description = "",
             onAddRecipeStepClicked = {},
             onDescriptionChanged = {},
-            photo = null,
+            onBackPressed = {},
+            photo = PhotoItem.AddPhotoItem,
         )
     }
 }

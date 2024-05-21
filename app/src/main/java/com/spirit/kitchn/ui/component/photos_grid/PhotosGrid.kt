@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.component
+package com.spirit.kitchn.ui.component.photos_grid
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -29,24 +29,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.spirit.kitchn.ui.component.AddImageArea
 import com.spirit.kitchn.ui.theme.KTheme
-import java.io.File
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import java.io.File
 
-
-sealed interface PhotoItem {
-    val id: Int
-
-    data class Photo(
-        override val id: Int,
-        val url: String,
-    ) : PhotoItem
-
-    data object AddPhotoItem : PhotoItem {
-        override val id: Int = -1
-    }
-}
 
 @Composable
 fun PhotosGrid(
@@ -77,7 +65,7 @@ fun PhotosGrid(
             autoScrollThreshold = with(LocalDensity.current) { 40.dp.toPx() }
         )
     ) {
-        items(photos.toMutableList() + PhotoItem.AddPhotoItem, key = { it.id }) { photo ->
+        items(photos.toMutableList() + PhotoItem.AddPhotoItem, key = { it.id ?: 0 }) { photo ->
             when (photo) {
                 PhotoItem.AddPhotoItem -> {
                     AddImageArea(
@@ -93,7 +81,7 @@ fun PhotosGrid(
                         modifier = Modifier
                             .semantics {
                                 onLongClick("Select") {
-                                    onDeleteAsset(photo.id)
+                                    onDeleteAsset(photo.id ?: 0)
                                     true
                                 }
                             }

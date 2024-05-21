@@ -23,8 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.AddImageArea
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.PhotoItem
-import com.spirit.kitchn.ui.component.PhotosGrid
+import com.spirit.kitchn.ui.component.photos_grid.PhotoItem
+import com.spirit.kitchn.ui.component.photos_grid.PhotosGrid
 import com.spirit.kitchn.ui.theme.KTheme
 import java.io.File
 

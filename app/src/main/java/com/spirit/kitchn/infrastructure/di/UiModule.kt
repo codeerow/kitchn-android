@@ -40,13 +40,14 @@ val uiModule = module {
         )
     }
 
-    viewModel {
+    viewModel { (curStepNumber: Int) ->
         val creationScope = getKoin().getOrCreateScope<CreateRecipeViewModel>("")
 
         AddRecipeStepViewModel(
             createRecipeUseCase = get(),
-            recipeCreationRequest = creationScope.get(),
-            navHostController = get(),
+            request = creationScope.get(),
+            coordinator = get(),
+            curStepNumber = curStepNumber,
         )
     }
 
@@ -55,9 +56,9 @@ val uiModule = module {
 
         CreateRecipeViewModel(
             createRecipeUseCase = get(),
-            recipeCreationRequest = creationScope.get(),
+            request = creationScope.get(),
             onCleared = { creationScope.close() },
-            navHostController = get(),
+            coordinator = get(),
         )
     }
 
@@ -66,7 +67,7 @@ val uiModule = module {
             recipeIdArg = recipeIdArg,
             getRecipeDescriptionUseCase = get(),
             deleteRecipeUseCase = get(),
-            navHostController = get(),
+            coordinator = get(),
         )
     }
 }
