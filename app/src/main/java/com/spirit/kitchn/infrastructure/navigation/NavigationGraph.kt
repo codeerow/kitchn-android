@@ -127,7 +127,7 @@ internal fun NavigationGraph() {
                 products = products,
                 onAddProductClicked = viewModel::onAddProductClicked,
                 onItemClicked = viewModel::onDeleteProductClicked,
-                onShowAllRecipesClicked = { rootController.navigate(RECIPES_ROUTE) },
+                onShowAllRecipesClicked = viewModel::showAllRecipes,
             )
         }
 
@@ -139,11 +139,8 @@ internal fun NavigationGraph() {
 
             RecipesScreen(
                 recipes = recipes,
-                onAddRecipeClicked = { rootController.navigate(CREATE_RECIPE_ROUTE) },
-                onItemClicked = {
-                    val route = RECIPE_DESCRIPTION_ROUTE.replace("{$RECIPE_ID_ARG}", it)
-                    rootController.navigate(route)
-                },
+                onAddRecipeClicked = viewModel::addRecipe,
+                onItemClicked = viewModel::onItemClicked,
             )
         }
 
@@ -153,18 +150,18 @@ internal fun NavigationGraph() {
             val viewModel: CreateRecipeViewModel = koinNavViewModel()
 
             val name by viewModel.name.collectAsState()
-            val description by viewModel.description.collectAsState()
             val preview by viewModel.preview.collectAsState()
+            val description by viewModel.description.collectAsState()
 
             CreateRecipeScreen(
                 name = name,
+                photo = preview,
+                description = description,
+                onUpdateAsset = viewModel::addPreview,
                 onNameChanged = viewModel.name::tryEmit,
                 onCreateRecipeClicked = viewModel::createRecipe,
                 onAddRecipeStepClicked = viewModel::addRecipeStep,
-                onUpdateAsset = viewModel::addPreview,
-                description = description,
                 onDescriptionChanged = viewModel.description::tryEmit,
-                photo = preview,
             )
         }
 
@@ -173,19 +170,19 @@ internal fun NavigationGraph() {
         ) {
             val viewModel: AddRecipeStepViewModel = koinNavViewModel()
 
+            val preview by viewModel.preview.collectAsState()
             val description by viewModel.description.collectAsState()
             val ingredients by viewModel.ingredients.collectAsState()
-            val preview by viewModel.preview.collectAsState()
 
             AddRecipeStepScreen(
-                onCreateRecipeClicked = viewModel::createRecipe,
-                onUpdateAsset = viewModel::addPreview,
-                onIngredientChanged = viewModel.ingredients::tryEmit,
+                photo = preview,
                 ingredients = ingredients,
                 description = description,
+                onUpdateAsset = viewModel::addPreview,
+                onCreateRecipeClicked = viewModel::createRecipe,
                 onAddRecipeStepClicked = viewModel::addRecipeStep,
+                onIngredientChanged = viewModel.ingredients::tryEmit,
                 onDescriptionChanged = viewModel.description::tryEmit,
-                photo = preview,
             )
         }
 

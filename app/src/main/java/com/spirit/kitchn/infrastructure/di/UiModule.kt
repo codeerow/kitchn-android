@@ -14,7 +14,7 @@ val uiModule = module {
     viewModel {
         WelcomeViewModel(
             loginUseCase = get(),
-            navHostController = get(),
+            coordinator = get(),
         )
     }
     viewModel {
@@ -22,7 +22,7 @@ val uiModule = module {
             getMyProductsUseCase = get(),
             addProductUseCase = get(),
             deleteProductUseCase = get(),
-            navHostController = get(),
+            coordinator = get(),
         )
     }
 
@@ -36,6 +36,7 @@ val uiModule = module {
     viewModel {
         RecipesViewModel(
             getAllRecipesUseCase = get(),
+            coordinator = get(),
         )
     }
 
