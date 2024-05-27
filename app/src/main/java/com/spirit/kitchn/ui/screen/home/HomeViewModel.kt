@@ -7,7 +7,6 @@ import com.spirit.kitchn.core.user.product.usecases.DeleteProductUseCase
 import com.spirit.kitchn.core.user.product.usecases.GetMyProductsUseCase
 import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
 import com.spirit.kitchn.infrastructure.navigation.AppCoordinator
-import com.spirit.kitchn.infrastructure.navigation.RECIPES_ROUTE
 import com.spirit.kitchn.ui.component.item.product.ProductItemVO
 import com.spirit.kitchn.ui.mapping.toVO
 import kotlinx.coroutines.flow.MutableStateFlow

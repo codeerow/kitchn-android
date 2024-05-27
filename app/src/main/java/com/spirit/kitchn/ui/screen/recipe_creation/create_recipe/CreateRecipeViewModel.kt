@@ -4,17 +4,16 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spirit.kitchn.core.recipe.CreateRecipeUseCase
-import com.spirit.kitchn.infrastructure.navigation.AppCoordinator
 import com.spirit.kitchn.ui.component.photos_grid.PhotoItem
+import com.spirit.kitchn.ui.screen.recipe_creation.RecipeCreationCoordinator
 import com.spirit.kitchn.utils.map
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class CreateRecipeViewModel(
-    private val createRecipeUseCase: CreateRecipeUseCase,
     private val request: MutableStateFlow<CreateRecipeUseCase.Request>,
     private val onCleared: () -> Unit,
-    private val coordinator: AppCoordinator,
+    private val coordinator: RecipeCreationCoordinator,
 ) : ViewModel() {
 
     val name = request.map(viewModelScope) { it.name }
@@ -24,10 +23,7 @@ class CreateRecipeViewModel(
     }
 
     fun createRecipe() {
-        viewModelScope.launch {
-            createRecipeUseCase.execute(request.value)
-            coordinator.navigateBackToRecipes()
-        }
+        coordinator.createRecipe(request.value)
     }
 
     fun addPreview(uri: Uri) {
@@ -41,7 +37,7 @@ class CreateRecipeViewModel(
     }
 
     fun addRecipeStep() {
-        coordinator.navigateToNextStepCreation(curStepNumber = 0)
+        coordinator.addStep(curStepNumber = 0)
     }
 
     fun changeName(name: String) {

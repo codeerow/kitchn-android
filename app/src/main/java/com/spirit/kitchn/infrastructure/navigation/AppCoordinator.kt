@@ -3,12 +3,14 @@ package com.spirit.kitchn.infrastructure.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
+import com.spirit.kitchn.ui.screen.recipe_creation.RecipeCreationCoordinator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class AppCoordinator(
     private val navController: NavController,
+    private val recipeCreationCoordinator: RecipeCreationCoordinator,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -33,16 +35,16 @@ class AppCoordinator(
     }
 
     fun navigateToRecipeCreation() {
-        navController.navigateOnMainThread(CREATE_RECIPE_ROUTE)
+        recipeCreationCoordinator.start()
+    }
+
+    fun navigateToAllRecipes() {
+        navController.navigateOnMainThread(RECIPES_ROUTE)
     }
 
     fun navigateToRecipeDescription(id: String) {
         val route = RECIPE_DESCRIPTION_ROUTE.replace("{$RECIPE_ID_ARG}", id)
         navController.navigateOnMainThread(route)
-    }
-
-    fun navigateToAllRecipes() {
-        navController.navigateOnMainThread(RECIPES_ROUTE)
     }
 
     fun navigateBackToRecipes() {
@@ -54,12 +56,6 @@ class AppCoordinator(
 
     fun navigateBackward() {
         navController.popBackStackOnMainThread()
-    }
-
-    fun navigateToNextStepCreation(curStepNumber: Int) {
-        val nextStep = curStepNumber + 1
-        val route = ADD_STEP_RECIPE_ROUTE.replace("{$CURRENT_STEP_NUMBER_ARG}", nextStep.toString())
-        navController.navigateOnMainThread(route)
     }
 
 
