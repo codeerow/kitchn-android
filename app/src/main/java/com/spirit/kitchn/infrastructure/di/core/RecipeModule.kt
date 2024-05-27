@@ -5,7 +5,7 @@ import com.spirit.kitchn.core.recipe.DeleteRecipeUseCase
 import com.spirit.kitchn.core.recipe.GetAllRecipesUseCase
 import com.spirit.kitchn.core.recipe.GetRecipeDescriptionUseCase
 import com.spirit.kitchn.core.recipe.datasource.RecipeDataSource
-import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
+import com.spirit.kitchn.ui.screen.recipe_creation.RecipeCreationCoordinator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -57,7 +57,14 @@ val recipeModule = module {
         )
     }
 
-    scope<CreateRecipeViewModel> {
+
+    scope<RecipeCreationCoordinator> {
+        scoped {
+            RecipeCreationCoordinator(
+                navController = get(),
+                createRecipeUseCase = get()
+            )
+        }
         scoped { MutableStateFlow(CreateRecipeUseCase.Request()) }
     }
 }

@@ -7,11 +7,11 @@ import com.spirit.kitchn.ui.screen.recipe_creation.RecipeCreationCoordinator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
 
 class AppCoordinator(
     private val navController: NavController,
-    private val recipeCreationCoordinator: RecipeCreationCoordinator,
-) {
+) : KoinComponent {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun navigateHome() {
@@ -35,6 +35,7 @@ class AppCoordinator(
     }
 
     fun navigateToRecipeCreation() {
+        val recipeCreationCoordinator = getKoin().get<RecipeCreationCoordinator>()
         recipeCreationCoordinator.start()
     }
 

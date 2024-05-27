@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.navigation.NavHostController
@@ -179,6 +180,10 @@ internal fun NavigationGraph() {
             val preview by viewModel.preview.collectAsState()
             val description by viewModel.description.collectAsState()
             val ingredients by viewModel.ingredients.collectAsState()
+
+            val test = with(LocalContext.current) {
+                koin
+            }
 
             AddRecipeStepScreen(
                 photo = preview,

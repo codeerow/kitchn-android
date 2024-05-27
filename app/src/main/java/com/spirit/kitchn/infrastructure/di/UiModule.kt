@@ -2,6 +2,7 @@ package com.spirit.kitchn.infrastructure.di
 
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
 import com.spirit.kitchn.ui.screen.home.HomeViewModel
+import com.spirit.kitchn.ui.screen.recipe_creation.RecipeCreationCoordinator
 import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
 import com.spirit.kitchn.ui.screen.recipe_description.RecipeDescriptionViewModel
@@ -41,24 +42,21 @@ val uiModule = module {
     }
 
     viewModel { (curStepNumber: Int) ->
-        val creationScope = getKoin().getOrCreateScope<CreateRecipeViewModel>("")
+        val creationScope = getKoin().getOrCreateScope<RecipeCreationCoordinator>("")
 
         AddRecipeStepViewModel(
-            createRecipeUseCase = get(),
-            request = creationScope.get(),
-            coordinator = get(),
+            coordinator = creationScope.get(),
             curStepNumber = curStepNumber,
         )
     }
 
     viewModel {
-        val creationScope = getKoin().getOrCreateScope<CreateRecipeViewModel>("")
+        val creationScope = getKoin().getOrCreateScope<RecipeCreationCoordinator>("")
 
         CreateRecipeViewModel(
-            createRecipeUseCase = get(),
             request = creationScope.get(),
             onCleared = { creationScope.close() },
-            coordinator = get(),
+            coordinator = creationScope.get(),
         )
     }
 

@@ -11,24 +11,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class CreateRecipeViewModel(
-    private val request: MutableStateFlow<CreateRecipeUseCase.Request>,
-    private val onCleared: () -> Unit,
+    recipeMainInfo: MutableStateFlow<CreateRecipeUseCase.Request.RecipeMainInfo>,
     private val coordinator: RecipeCreationCoordinator,
-) : ViewModel() {
+) {
 
-    val name = request.map(viewModelScope) { it.name }
-    val description = request.map(viewModelScope) { it.description }
-    val preview = request.map(viewModelScope) {
+    val name = recipeMainInfo.map(viewModelScope) { it.name }
+    val description = recipeMainInfo.map(viewModelScope) { it.description }
+    val preview = recipeMainInfo.map(viewModelScope) {
         it.previewImage?.let { PhotoItem.Photo(url = it.toString()) } ?: PhotoItem.AddPhotoItem
     }
 
     fun createRecipe() {
-        coordinator.createRecipe(request.value)
+        coordinator.createRecipe()
     }
 
     fun addPreview(uri: Uri) {
         viewModelScope.launch {
-            request.emit(
+            recipeMainInfo.emit(
                 request.value.copy(
                     previewImage = uri,
                 )
@@ -37,7 +36,7 @@ class CreateRecipeViewModel(
     }
 
     fun addRecipeStep() {
-        coordinator.addStep(curStepNumber = 0)
+        coordinator.addStep()
     }
 
     fun changeName(name: String) {
@@ -50,10 +49,5 @@ class CreateRecipeViewModel(
         viewModelScope.launch {
             request.emit(request.value.copy(description = description))
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        onCleared.invoke()
     }
 }

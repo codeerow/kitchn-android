@@ -11,9 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class AddRecipeStepViewModel(
-    private val curStepNumber: Int,
     private val coordinator: RecipeCreationCoordinator,
-    private val request: MutableStateFlow<CreateRecipeUseCase.Request>,
+    private val step: CreateRecipeUseCase.Request,
 ) : ViewModel() {
 
     init {

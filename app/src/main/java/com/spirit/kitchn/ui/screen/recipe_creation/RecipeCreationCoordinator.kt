@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 class RecipeCreationCoordinator(
     private val navController: NavController,
     private val createRecipeUseCase: CreateRecipeUseCase,
+    private val request: CreateRecipeUseCase.Request,
 ) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -28,8 +29,8 @@ class RecipeCreationCoordinator(
         navController.popBackStackOnMainThread()
     }
 
-    fun addStep(curStepNumber: Int) {
-        val nextStep = curStepNumber + 1
+    fun addStep() {
+        val nextStep = request.steps.size
         val route = ADD_STEP_RECIPE_ROUTE.replace("{$CURRENT_STEP_NUMBER_ARG}", nextStep.toString())
         navController.navigateOnMainThread(route)
     }
@@ -38,7 +39,7 @@ class RecipeCreationCoordinator(
         navController.popBackStackOnMainThread(RECIPES_ROUTE, false)
     }
 
-    fun createRecipe(request: CreateRecipeUseCase.Request) {
+    fun createRecipe() {
         coroutineScope.launch {
             createRecipeUseCase.execute(request)
             close()
