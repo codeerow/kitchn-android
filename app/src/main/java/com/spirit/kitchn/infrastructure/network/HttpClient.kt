@@ -13,7 +13,6 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -41,30 +40,12 @@ fun buildHttpClient(
         }
     }
 
-    install(ResponseObserver) {
-        onResponse { response ->
-            println("HTTP status: ${response.status.value}")
-            // Add custom logic for response handling
-        }
-    }
-
     defaultRequest {
         url {
             protocol = URLProtocol.HTTP
             host = BuildConfig.BASE_URL
         }
     }
-
-
-//    coroutineScope {
-//        withContext(Dispatchers.Main) {
-//            val route = ERROR_ROUTE.replace(
-//                "{$ERROR_DESCRIPTION_ARG}",
-//                "There is no internet connection"
-//            )
-//            rootNavController.navigate(route)
-//        }
-//    }
 
     install(Auth) {
         bearer {

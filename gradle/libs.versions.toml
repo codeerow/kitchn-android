@@ -1,12 +1,12 @@
 [versions]
-agp = "8.3.2"
+agp = "8.4.1"
 barcodeScanning = "17.2.0"
-kotlin = "1.9.0"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.8.0"
+lifecycleRuntimeKtx = "2.8.1"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
 koin = "3.5.3"
@@ -16,13 +16,12 @@ coil = "2.5.0"
 compose-navigation = "2.7.7"
 ktor = "2.3.9"
 kotlinx-serialization-json = "1.6.3"
-firebase-bom = "33.0.0"
+firebase-bom = "33.1.0"
 firebase-pref = "1.4.2"
-firebase-crashlytics = "3.0.0"
-google-services = "4.4.1"
-kotlinx-immutable-collections = "0.3.6"
+firebase-crashlytics = "3.0.1"
+google-services = "4.4.2"
 onetapcompose = "1.0.0"
-play-services-auth-version = "21.1.1"
+play-services-auth-version = "21.2.0"
 playServicesCodeScanner = "16.1.0"
 securityCrypto = "1.1.0-alpha06"
 
@@ -44,7 +43,6 @@ compose-material = { module = "androidx.compose.material3:material3" }
 compose-icons = { module = "androidx.compose.material:material-icons-extended" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-kotlinx-immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-immutable-collections" }
 
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -86,9 +84,11 @@ jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "k
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-pref" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 [bundles]
-ui = ["compose-ui-tooling", "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "compose-ui", "compose-graphics", "compose-preview", "compose-material", "coil-compose", "compose-icons", "kotlinx-immutable-collections"]
+ui = ["compose-ui-tooling", "androidx-lifecycle-runtime-ktx", "androidx-activity-compose", "compose-ui", "compose-graphics", "compose-preview", "compose-material", "coil-compose", "compose-icons"]
 navigation = ["compose-navigation"]
 firebase = ["firebase-analytics-ktx", "firebase-crashlytics-ktx", "firebase-installations-ktx", "firebase-perf-ktx", "firebase-auth"]
 di = ["koin-android", "koin-core", "koin-compose", "koin-compose-navigation"]

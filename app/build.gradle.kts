@@ -4,7 +4,8 @@ plugins {
     alias(libs.plugins.googleServices)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.firebase.crashlytics)
-    kotlin("plugin.serialization") version "1.9.23"
+    alias(libs.plugins.compose.compiler)
+    kotlin("plugin.serialization") version libs.versions.kotlin
 }
 
 android {
@@ -45,9 +46,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
