@@ -4,10 +4,7 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.spirit.kitchn.core.recipe.CreateRecipeUseCase
-import com.spirit.kitchn.infrastructure.navigation.ADD_STEP_RECIPE_ROUTE
-import com.spirit.kitchn.infrastructure.navigation.RECIPES_ROUTE
 import com.spirit.kitchn.ui.component.PhotoItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -15,7 +12,8 @@ import kotlinx.coroutines.launch
 class CreateRecipeViewModel(
     private val createRecipeUseCase: CreateRecipeUseCase,
     private val recipeCreationRequest: CreateRecipeUseCase.Request,
-    private val navHostController: NavHostController,
+    private val onRecipeCreated: () -> Unit,
+    private val onAddRecipeStep: () -> Unit,
     private val onCleared: () -> Unit,
 ) : ViewModel() {
     val name = MutableStateFlow("")
@@ -30,10 +28,7 @@ class CreateRecipeViewModel(
                 previewImage = preview.value?.url?.toUri(),
             )
             createRecipeUseCase.execute(request)
-            navHostController.popBackStack(
-                route = RECIPES_ROUTE,
-                inclusive = false,
-            )
+            onRecipeCreated()
         }
     }
 
@@ -53,7 +48,7 @@ class CreateRecipeViewModel(
             recipeCreationRequest.name = name.value
             recipeCreationRequest.description = description.value
             recipeCreationRequest.previewImage = preview.value?.url?.toUri()
-            navHostController.navigate(ADD_STEP_RECIPE_ROUTE)
+            onAddRecipeStep()
         }
     }
 

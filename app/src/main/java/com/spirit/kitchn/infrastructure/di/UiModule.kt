@@ -11,62 +11,70 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val uiModule = module {
-    viewModel {
+
+    viewModel { (onLoginFinished: () -> Unit) ->
         WelcomeViewModel(
             loginUseCase = get(),
-            coordinator = get(),
+            onLoginFinished = onLoginFinished,
         )
     }
-    viewModel {
+
+    viewModel { (
+                    navigateToProductCreation: (String) -> Unit,
+                    navigateToError: (String) -> Unit,
+                ) ->
         HomeViewModel(
             getMyProductsUseCase = get(),
             addProductUseCase = get(),
             deleteProductUseCase = get(),
-            coordinator = get(),
+            navigateToProductCreation = navigateToProductCreation,
+            navigateToError = navigateToError,
         )
     }
 
-    viewModel { (barcode: String) ->
+    viewModel { (barcode: String, onProductAdded: () -> Unit) ->
         AddProductViewModel(
             barcode = barcode,
             addProductManuallyUseCase = get(),
+            onProductAdded = onProductAdded,
         )
     }
 
     viewModel {
         RecipesViewModel(
             getAllRecipesUseCase = get(),
-            coordinator = get(),
         )
     }
 
-    viewModel {
+    viewModel { (onAddRecipeStep: () -> Unit, onRecipeCreated: () -> Unit) ->
         val creationScope = getKoin().getOrCreateScope<CreateRecipeViewModel>("")
 
         AddRecipeStepViewModel(
             createRecipeUseCase = get(),
             recipeCreationRequest = creationScope.get(),
-            navHostController = get(),
+            onAddRecipeStep = onAddRecipeStep,
+            onRecipeCreated = onRecipeCreated,
         )
     }
 
-    viewModel {
+    viewModel { (onRecipeCreated: () -> Unit, onAddRecipeStep: () -> Unit) ->
         val creationScope = getKoin().getOrCreateScope<CreateRecipeViewModel>("")
 
         CreateRecipeViewModel(
             createRecipeUseCase = get(),
             recipeCreationRequest = creationScope.get(),
             onCleared = { creationScope.close() },
-            navHostController = get(),
+            onRecipeCreated = onRecipeCreated,
+            onAddRecipeStep = onAddRecipeStep,
         )
     }
 
-    viewModel { (recipeIdArg: String) ->
+    viewModel { (recipeIdArg: String, onRecipeDeleted: () -> Unit) ->
         RecipeDescriptionViewModel(
             recipeIdArg = recipeIdArg,
             getRecipeDescriptionUseCase = get(),
             deleteRecipeUseCase = get(),
-            navHostController = get(),
+            onRecipeDeleted = onRecipeDeleted,
         )
     }
 }

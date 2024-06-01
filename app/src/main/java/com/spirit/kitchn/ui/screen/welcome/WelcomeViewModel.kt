@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spirit.kitchn.BuildConfig
 import com.spirit.kitchn.core.auth.LoginUseCase
-import com.spirit.kitchn.infrastructure.navigation.AppCoordinator
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class WelcomeViewModel(
     private val loginUseCase: LoginUseCase,
-    private val coordinator: AppCoordinator,
+    private val onLoginFinished: () -> Unit,
 ) : ViewModel() {
 
     val email = MutableStateFlow(if (BuildConfig.DEBUG) "roman.pozdniakov.98@gmail.com" else "")
@@ -19,7 +18,7 @@ class WelcomeViewModel(
     fun onLoginClicked() {
         viewModelScope.launch {
             loginUseCase.execute(email = email.value, password = password.value)
-            coordinator.navigateHome()
+            onLoginFinished()
         }
     }
 }

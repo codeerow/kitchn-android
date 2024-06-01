@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 class AddProductViewModel(
     private val barcode: String,
     private val addProductManuallyUseCase: AddProductManuallyUseCase,
+    private val onProductAdded: () -> Unit,
 ) : ViewModel() {
 
     val photos = MutableStateFlow(listOf<PhotoItem.Photo>())

@@ -10,5 +10,4 @@ val appModule = uiModule +
     userModule +
     recipeModule +
     networkModule +
-    navigationModule +
     productModule

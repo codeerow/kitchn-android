@@ -1,7 +1,6 @@
 package com.spirit.kitchn.infrastructure.network
 
 import android.util.Log
-import androidx.navigation.NavHostController
 import com.spirit.kitchn.BuildConfig
 import com.spirit.kitchn.core.auth.repo.TokenRepo
 import io.ktor.client.HttpClient
@@ -21,7 +20,6 @@ import kotlinx.serialization.json.Json
 
 fun buildHttpClient(
     tokenRepo: TokenRepo,
-    rootNavController: NavHostController,
 ) = HttpClient(Android) {
 
     install(ContentNegotiation) {

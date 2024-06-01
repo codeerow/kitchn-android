@@ -7,7 +7,6 @@ val networkModule = module {
     single {
         buildHttpClient(
             tokenRepo = get(),
-            rootNavController = get(),
         )
     }
 }

@@ -1,15 +1,14 @@
 package com.spirit.kitchn.ui.screen.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.spirit.kitchn.core.product.model.ProductDTO
 import com.spirit.kitchn.core.user.product.usecases.DeleteProductUseCase
 import com.spirit.kitchn.core.user.product.usecases.GetMyProductsUseCase
 import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
-import com.spirit.kitchn.infrastructure.navigation.AppCoordinator
-import com.spirit.kitchn.infrastructure.navigation.RECIPES_ROUTE
 import com.spirit.kitchn.ui.component.item.product.ProductItemVO
 import com.spirit.kitchn.ui.mapping.toVO
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -21,40 +20,42 @@ class HomeViewModel(
     getMyProductsUseCase: GetMyProductsUseCase,
     private val addProductUseCase: AddProductUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
-    private val coordinator: AppCoordinator,
+    private val navigateToProductCreation: (String) -> Unit,
+    private val navigateToError: (String) -> Unit,
 ) : ViewModel() {
 
     private val _products = MutableStateFlow<List<ProductItemVO>>(listOf())
     val products: StateFlow<List<ProductItemVO>> = _products
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
         getMyProductsUseCase.execute()
             .map { it.map(ProductDTO::toVO) }
             .onEach(_products::emit)
-            .launchIn(viewModelScope)
+            .launchIn(coroutineScope)
     }
 
     fun onAddProductClicked() {
-        viewModelScope.launch {
+        coroutineScope.launch {
             when (val result = addProductUseCase.execute()) {
                 is AddProductUseCase.Result.Failure.ProductNotFound -> {
-                    coordinator.navigateToProductCreation(result.barcode)
+                    navigateToProductCreation(result.barcode)
                 }
 
                 AddProductUseCase.Result.Failure.ScanFailed -> {
-                    coordinator.navigateToError("Error during scanning")
+                    navigateToError("Error during scanning")
                 }
 
-                AddProductUseCase.Result.Success -> {}
+                AddProductUseCase.Result.Success -> {
+
+                }
             }
         }
     }
 
     fun onDeleteProductClicked(productId: String) {
-        viewModelScope.launch {
+        coroutineScope.launch {
             deleteProductUseCase.execute(productId = productId)
         }
     }
-
-    fun showAllRecipes() = coordinator.navigateToAllRecipes()
 }
