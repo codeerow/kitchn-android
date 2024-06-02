@@ -1,7 +1,7 @@
 package com.spirit.kitchn.infrastructure.di
 
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
-import com.spirit.kitchn.ui.screen.home.HomeViewModel
+import com.spirit.kitchn.ui.screen.home.PantryViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
 import com.spirit.kitchn.ui.screen.recipe_description.RecipeDescriptionViewModel
@@ -23,7 +23,7 @@ val uiModule = module {
                     navigateToProductCreation: (String) -> Unit,
                     navigateToError: (String) -> Unit,
                 ) ->
-        HomeViewModel(
+        PantryViewModel(
             getMyProductsUseCase = get(),
             addProductUseCase = get(),
             deleteProductUseCase = get(),

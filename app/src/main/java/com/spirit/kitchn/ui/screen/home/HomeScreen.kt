@@ -11,7 +11,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,22 +27,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.KButton
+import com.spirit.kitchn.ui.component.KSwipeToDismissBox
 import com.spirit.kitchn.ui.component.item.product.ProductItem
 import com.spirit.kitchn.ui.component.item.product.ProductItemVO
 import com.spirit.kitchn.ui.theme.KTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun PantryScreen(
     onAddProductClicked: () -> Unit,
-    onShowAllRecipesClicked: () -> Unit,
+    onProductSwiped: (String) -> Unit,
     onItemClicked: (String) -> Unit,
     products: List<ProductItemVO>,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text("Kitchn") })
+            TopAppBar(title = { Text("Your products") })
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddProductClicked) {
+                Icon(Icons.Filled.Add, "Add Product")
+            }
         }
     ) { padding ->
         Column(
@@ -51,14 +61,10 @@ fun HomeScreen(
             ProductList(
                 products = products,
                 onItemClick = onItemClicked,
+                onProductSwiped = onProductSwiped,
                 modifier = Modifier
                     .weight(1f)
             )
-
-            ShowAllRecipeButton(onClick = onShowAllRecipesClicked)
-            AddProductButton(onClick = onAddProductClicked)
-
-            Spacer(modifier = Modifier.height(26.dp))
         }
     }
 }
@@ -68,6 +74,7 @@ private fun ProductList(
     products: List<ProductItemVO>,
     modifier: Modifier,
     onItemClick: (String) -> Unit,
+    onProductSwiped: (String) -> Unit,
 ) {
     if (products.isEmpty()) {
         Text(
@@ -82,10 +89,14 @@ private fun ProductList(
             contentPadding = PaddingValues(0.dp),
         ) {
             items(products) {
-                ProductItem(
-                    product = it,
-                    onItemClick = onItemClick,
-                )
+                KSwipeToDismissBox(
+                    onSwipe = { onProductSwiped(it.id) }
+                ) {
+                    ProductItem(
+                        product = it,
+                        onItemClick = onItemClick,
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -120,7 +131,7 @@ private fun ShowAllRecipeButton(onClick: () -> Unit) {
 @Composable
 private fun HomeScreenPreview() {
     KTheme {
-        HomeScreen(
+        PantryScreen(
             products = listOf(
                 ProductItemVO(
                     imageUrl = "123",
@@ -135,7 +146,7 @@ private fun HomeScreenPreview() {
             ),
             onAddProductClicked = {},
             onItemClicked = {},
-            onShowAllRecipesClicked = {},
+            onProductSwiped = {},
         )
     }
 }

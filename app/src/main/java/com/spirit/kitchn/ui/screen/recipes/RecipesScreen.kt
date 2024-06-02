@@ -1,14 +1,16 @@
 package com.spirit.kitchn.ui.screen.recipes
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -36,6 +38,11 @@ fun RecipesScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(title = { Text("Recipes") })
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddRecipeClicked) {
+                Icon(Icons.Filled.Add, "Add Product")
+            }
         }
     ) { padding ->
         Column(
@@ -51,10 +58,6 @@ fun RecipesScreen(
                 isPreview = isPreview,
                 recipes = recipes,
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            AddRecipeButton(onAddRecipeClicked = onAddRecipeClicked)
-
-            Spacer(modifier = Modifier.height(26.dp))
         }
     }
 }

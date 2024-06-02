@@ -23,7 +23,7 @@ fun NavGraphBuilder.recipeDescriptionScreen(
         val recipeIdArg = backStackEntry.arguments?.getString(RECIPE_ID_ARG) ?: ""
 
         val viewModel: RecipeDescriptionViewModel = koinNavViewModel {
-            parametersOf(recipeIdArg)
+            parametersOf(recipeIdArg, onRecipeDeleted)
         }
 
         val state by viewModel.state.collectAsState()
