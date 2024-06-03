@@ -1,14 +1,15 @@
 package com.spirit.kitchn.core.product
 
+import com.spirit.kitchn.core.product.api.ProductAPI
 import com.spirit.kitchn.core.product.model.ProductDTO
+import com.spirit.kitchn.infrastructure.network.executeWith
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
 
 class GetProductDetailsUseCase(
     private val httpClient: HttpClient,
 ) {
     suspend fun execute(id: String): ProductDTO {
-        return httpClient.get("/product/${id}").body()
+        return ProductAPI.GetProductDetailsEndpoint(id = id)
+            .executeWith(httpClient)
     }
 }

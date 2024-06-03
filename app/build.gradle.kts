@@ -27,6 +27,24 @@ android {
         buildConfigField("String", "BASE_URL", "\"localhost:3000\"")
     }
 
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("stubbed") {
+            //flavor configurations here
+        }
+        create("prod") {
+            //flavor configurations here
+        }
+        create("qa") {
+            //flavor configurations here
+        }
+        create("develop") {
+            //flavor configurations here
+        }
+    }
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -71,8 +89,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("androidx.compose.ui:ui:1.6.7")
-    implementation("androidx.compose.material:material:1.6.7")
+    implementation(libs.ui)
+    implementation(libs.androidx.material)
+    implementation(libs.ktor.client.mock)
 
     implementation(libs.bundles.network)
     implementation(libs.bundles.ui)

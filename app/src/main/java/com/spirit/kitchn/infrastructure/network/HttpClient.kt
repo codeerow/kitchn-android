@@ -4,7 +4,7 @@ import android.util.Log
 import com.spirit.kitchn.BuildConfig
 import com.spirit.kitchn.core.auth.repo.TokenRepo
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -19,7 +19,8 @@ import kotlinx.serialization.json.Json
 
 fun buildHttpClient(
     tokenRepo: TokenRepo,
-) = HttpClient(Android) {
+    engine: HttpClientEngine,
+) = HttpClient(engine) {
 
     install(ContentNegotiation) {
         json(
