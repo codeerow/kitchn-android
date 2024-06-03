@@ -4,22 +4,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.core.parameter.parametersOf
 
-
-const val PANTRY_ROUTE = "HOME_ROUTE"
+@Serializable
+object Pantry
 
 fun NavGraphBuilder.pantryScreen(
-    navigateToProductCreation: (String) -> Unit,
-    navigateToError: (String) -> Unit,
+    onAddProductClicked: (String) -> Unit,
+    onProductClicked: (String) -> Unit,
+    onError: (String) -> Unit,
 ) {
-    composable(
-        route = PANTRY_ROUTE,
-    ) {
+    composable<Pantry> {
         val viewModel: PantryViewModel = koinNavViewModel {
             parametersOf(
-                navigateToProductCreation, navigateToError,
+                onAddProductClicked, onError,
             )
         }
 
@@ -28,7 +28,7 @@ fun NavGraphBuilder.pantryScreen(
         PantryScreen(
             products = products,
             onAddProductClicked = viewModel::onAddProductClicked,
-            onItemClicked = {},
+            onItemClicked = onProductClicked,
             onProductSwiped = viewModel::onDeleteProductClicked,
         )
     }

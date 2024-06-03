@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.screen.recipe_description.model
+package com.spirit.kitchn.ui.component.item.recipe_step
 
 data class StepItemVO(
     val description: String,

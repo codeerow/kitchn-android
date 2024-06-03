@@ -4,25 +4,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.core.parameter.parametersOf
 
-const val BARCODE_ARG = "BARCODE_ARG"
-const val PRODUCT_NOT_FOUND_ROUTE = "PRODUCT_NOT_FOUND_ROUTE/{$BARCODE_ARG}"
+@Serializable
+data class AddProductManually(val barcode: String)
 
 fun NavGraphBuilder.addProductScreen(
     onProductAdded: () -> Unit,
 ) {
-    composable(
-        route = PRODUCT_NOT_FOUND_ROUTE,
-        arguments = listOf(navArgument(BARCODE_ARG) { type = NavType.StringType })
-    ) { backStackEntry ->
-        val barcodeArg = backStackEntry.arguments?.getString(BARCODE_ARG) ?: ""
+    composable<AddProductManually> { backStackEntry ->
+        val addProductManually: AddProductManually = backStackEntry.toRoute()
         val viewModel: AddProductViewModel =
-            koinNavViewModel { parametersOf(barcodeArg, onProductAdded) }
+            koinNavViewModel { parametersOf(addProductManually.barcode, onProductAdded) }
 
         val name by viewModel.name.collectAsState()
         val productFamily by viewModel.productFamily.collectAsState()
@@ -42,9 +39,5 @@ fun NavGraphBuilder.addProductScreen(
 }
 
 fun NavController.navigateToAddProductScreen(barcode: String) {
-    val route = PRODUCT_NOT_FOUND_ROUTE.replace(
-        oldValue = "{$BARCODE_ARG}",
-        newValue = barcode,
-    )
-    navigate(route)
+    navigate(AddProductManually(barcode = barcode))
 }

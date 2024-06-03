@@ -2,30 +2,23 @@ package com.spirit.kitchn.ui.screen.error
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
 
-const val ERROR_DESCRIPTION_ARG = "ERROR_DESCRIPTION_ARG"
-const val ERROR_ROUTE = "ERROR_ROUTE/{$ERROR_DESCRIPTION_ARG}"
+@Serializable
+data class Error(val message: String)
 
-fun NavGraphBuilder.errorScreen(onBackClick: () -> Unit) {
-    composable(
-        route = ERROR_ROUTE,
-        arguments = listOf(navArgument(ERROR_DESCRIPTION_ARG) { type = NavType.StringType })
-    ) { backStackEntry ->
-        val errorDescriptionArg = backStackEntry.arguments?.getString(ERROR_DESCRIPTION_ARG) ?: ""
+fun NavGraphBuilder.errorScreen(onBackClicked: () -> Unit) {
+    composable<Error> { backStackEntry ->
+        val error: Error = backStackEntry.toRoute()
         ErrorScreen(
-            title = errorDescriptionArg,
-            onBackClick = onBackClick,
+            title = error.message,
+            onBackClick = onBackClicked,
         )
     }
 }
 
 fun NavController.navigateToError(errorMessage: String) {
-    val route = ERROR_ROUTE.replace(
-        oldValue = "{$ERROR_DESCRIPTION_ARG}",
-        newValue = errorMessage,
-    )
-    navigate(route)
+    navigate(Error(message = errorMessage))
 }

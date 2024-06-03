@@ -10,12 +10,9 @@ import androidx.navigation.compose.rememberNavController
 import com.spirit.kitchn.core.auth.repo.TokenRepo
 import com.spirit.kitchn.ui.screen.add_product.addProductScreen
 import com.spirit.kitchn.ui.screen.error.errorScreen
-import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.addStepRecipeScreen
-import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.navigateToAddRecipeStepScreen
-import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.createRecipeScreen
-import com.spirit.kitchn.ui.screen.recipe_description.recipeDescriptionScreen
-import com.spirit.kitchn.ui.screen.recipes.RECIPES_ROUTE
-import com.spirit.kitchn.ui.screen.welcome.WELCOME_ROUTE
+import com.spirit.kitchn.ui.screen.recipe_creation.createRecipeGraph
+import com.spirit.kitchn.ui.screen.recipe_details.recipeDetailsScreen
+import com.spirit.kitchn.ui.screen.welcome.Welcome
 import com.spirit.kitchn.ui.screen.welcome.welcomeScreen
 import org.koin.compose.koinInject
 
@@ -26,11 +23,9 @@ internal fun NavigationGraph() {
     val controller = rememberNavController()
     val tokenRepo = koinInject<TokenRepo>()
 
-    val startDestination = if (tokenRepo.accessToken.isBlank()) WELCOME_ROUTE else NAVIGATION_BAR_HOST_ROUTE
-
     NavHost(
         navController = controller,
-        startDestination = startDestination,
+        startDestination = if (tokenRepo.accessToken.isBlank()) Welcome else NavigationBarHost,
         enterTransition = { screenSlideIn() },
         exitTransition = { screenFadeOut() },
         popEnterTransition = { screenFadeIn() },
@@ -44,21 +39,17 @@ internal fun NavigationGraph() {
             rootController = controller,
         )
         addProductScreen(
-            onProductAdded = { controller.popBackStack(RECIPES_ROUTE, inclusive = false) },
+            onProductAdded = { controller.popBackStack(NavigationBarHost, inclusive = false) },
         )
         errorScreen(
-            onBackClick = controller::navigateUp,
+            onBackClicked = controller::navigateUp,
         )
-        createRecipeScreen(
-            onRecipeCreated = { controller.popBackStack(route = RECIPES_ROUTE, inclusive = false) },
-            onAddRecipeStep = controller::navigateToAddRecipeStepScreen,
+        recipeDetailsScreen(
+            onRecipeDeleted = { controller.popBackStack(route = NavigationBarHost, inclusive = false) },
         )
-        addStepRecipeScreen(
-            onAddRecipeStep = controller::navigateToAddRecipeStepScreen,
-            onRecipeCreated = { controller.popBackStack(route = RECIPES_ROUTE, inclusive = false) },
-        )
-        recipeDescriptionScreen(
-            onRecipeDeleted = { controller.popBackStack(route = RECIPES_ROUTE, inclusive = false) },
+        createRecipeGraph(
+            controller = controller,
+            onRecipeCreated = { controller.popBackStack(route = NavigationBarHost, inclusive = false) },
         )
     }
 }

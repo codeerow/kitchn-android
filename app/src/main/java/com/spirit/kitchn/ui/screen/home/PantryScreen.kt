@@ -43,7 +43,7 @@ fun PantryScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text("Your products") })
+            TopAppBar(title = { Text("Pantry") })
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddProductClicked) {

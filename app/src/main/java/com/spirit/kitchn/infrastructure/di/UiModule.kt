@@ -4,7 +4,7 @@ import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
 import com.spirit.kitchn.ui.screen.home.PantryViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
-import com.spirit.kitchn.ui.screen.recipe_description.RecipeDescriptionViewModel
+import com.spirit.kitchn.ui.screen.recipe_details.RecipeDetailsViewModel
 import com.spirit.kitchn.ui.screen.recipes.RecipesViewModel
 import com.spirit.kitchn.ui.screen.welcome.WelcomeViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -70,7 +70,7 @@ val uiModule = module {
     }
 
     viewModel { (recipeIdArg: String, onRecipeDeleted: () -> Unit) ->
-        RecipeDescriptionViewModel(
+        RecipeDetailsViewModel(
             recipeIdArg = recipeIdArg,
             getRecipeDescriptionUseCase = get(),
             deleteRecipeUseCase = get(),

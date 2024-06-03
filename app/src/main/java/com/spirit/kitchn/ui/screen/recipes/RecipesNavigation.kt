@@ -2,32 +2,26 @@ package com.spirit.kitchn.ui.screen.recipes
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.navigation.koinNavViewModel
 
-
-const val RECIPES_ROUTE = "RECIPES_ROUTE"
-
-fun NavController.navigateToAllRecipes() {
-    navigate(RECIPES_ROUTE)
-}
+@Serializable
+object Recipes
 
 fun NavGraphBuilder.recipesScreen(
-    addRecipe: () -> Unit,
-    onItemClicked: (String) -> Unit,
+    onAddRecipeClicked: () -> Unit,
+    onRecipeItemClicked: (String) -> Unit,
 ) {
-    composable(
-        route = RECIPES_ROUTE,
-    ) {
+    composable<Recipes> {
         val viewModel: RecipesViewModel = koinNavViewModel()
         val recipes by viewModel.recipes.collectAsState()
 
         RecipesScreen(
             recipes = recipes,
-            onAddRecipeClicked = addRecipe,
-            onItemClicked = onItemClicked,
+            onAddRecipeClicked = onAddRecipeClicked,
+            onItemClicked = onRecipeItemClicked,
         )
     }
 }

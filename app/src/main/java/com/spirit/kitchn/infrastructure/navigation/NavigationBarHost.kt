@@ -21,33 +21,35 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.spirit.kitchn.ui.component.BottomNavigationBar
 import com.spirit.kitchn.ui.screen.add_product.navigateToAddProductScreen
-import com.spirit.kitchn.ui.screen.cooking.COOKING_ROUTE
+import com.spirit.kitchn.ui.screen.cooking.Cooking
 import com.spirit.kitchn.ui.screen.cooking.cookingScreen
 import com.spirit.kitchn.ui.screen.error.navigateToError
-import com.spirit.kitchn.ui.screen.home.PANTRY_ROUTE
+import com.spirit.kitchn.ui.screen.home.Pantry
 import com.spirit.kitchn.ui.screen.home.pantryScreen
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.navigateToCreateRecipe
-import com.spirit.kitchn.ui.screen.recipe_description.navigateToRecipeDescription
-import com.spirit.kitchn.ui.screen.recipes.RECIPES_ROUTE
+import com.spirit.kitchn.ui.screen.recipe_details.navigateToRecipeDetails
+import com.spirit.kitchn.ui.screen.recipes.Recipes
 import com.spirit.kitchn.ui.screen.recipes.recipesScreen
+import kotlinx.serialization.Serializable
 
-const val NAVIGATION_BAR_HOST_ROUTE = "navigation_bar_host"
+@Serializable
+object NavigationBarHost
 
-enum class BottomNavItem(val route: String, val icon: ImageVector, val label: String) {
-    COOKING(COOKING_ROUTE, Icons.Default.Cookie, "Cooking"),
-    PANTRY(PANTRY_ROUTE, Icons.Default.FoodBank, "Pantry"),
-    RECIPES(RECIPES_ROUTE, Icons.Default.Fastfood, "Recipes"),
+enum class BottomNavItem(val route: Any, val icon: ImageVector, val label: String) {
+    COOKING(Cooking, Icons.Default.Cookie, "Cooking"),
+    PANTRY(Pantry, Icons.Default.FoodBank, "Pantry"),
+    RECIPES(Recipes, Icons.Default.Fastfood, "Recipes"),
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun NavGraphBuilder.navigationBarHost(rootController: NavController) {
-    composable(NAVIGATION_BAR_HOST_ROUTE) {
+    composable<NavigationBarHost> {
         val controller = rememberNavController()
 
         Column(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = controller,
-                startDestination = COOKING_ROUTE,
+                startDestination = Cooking,
                 enterTransition = { screenSlideIn() },
                 exitTransition = { screenFadeOut() },
                 popEnterTransition = { screenFadeIn() },
@@ -59,12 +61,13 @@ fun NavGraphBuilder.navigationBarHost(rootController: NavController) {
             ) {
 
                 pantryScreen(
-                    navigateToProductCreation = rootController::navigateToAddProductScreen,
-                    navigateToError = rootController::navigateToError,
+                    onAddProductClicked = rootController::navigateToAddProductScreen,
+                    onProductClicked = rootController::navigateToAddProductScreen,
+                    onError = rootController::navigateToError,
                 )
                 recipesScreen(
-                    addRecipe = rootController::navigateToCreateRecipe,
-                    onItemClicked = rootController::navigateToRecipeDescription,
+                    onAddRecipeClicked = rootController::navigateToCreateRecipe,
+                    onRecipeItemClicked = rootController::navigateToRecipeDetails,
                 )
                 cookingScreen()
             }
@@ -82,5 +85,5 @@ fun NavGraphBuilder.navigationBarHost(rootController: NavController) {
 
 
 fun NavController.navigateToAuthorizedZone() {
-    navigate(NAVIGATION_BAR_HOST_ROUTE)
+    navigate(NavigationBarHost)
 }

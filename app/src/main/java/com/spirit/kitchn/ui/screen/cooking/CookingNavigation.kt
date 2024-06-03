@@ -14,14 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 
-const val COOKING_ROUTE = "COOKING_ROUTE"
+@Serializable
+object Cooking
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.cookingScreen() {
-    composable(
-        route = COOKING_ROUTE,
-    ) {
+    composable<Cooking> {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,

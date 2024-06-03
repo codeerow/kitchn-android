@@ -5,18 +5,18 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.core.parameter.parametersOf
 
-const val CREATE_RECIPE_ROUTE = "ADD_RECIPE_ROUTE"
+@Serializable
+object CreateRecipe
 
 fun NavGraphBuilder.createRecipeScreen(
     onRecipeCreated: () -> Unit,
     onAddRecipeStep: () -> Unit,
 ) {
-    composable(
-        route = CREATE_RECIPE_ROUTE,
-    ) {
+    composable<CreateRecipe> {
         val viewModel: CreateRecipeViewModel =
             koinNavViewModel { parametersOf(onRecipeCreated, onAddRecipeStep) }
 
@@ -38,5 +38,5 @@ fun NavGraphBuilder.createRecipeScreen(
 }
 
 fun NavController.navigateToCreateRecipe() {
-    navigate(CREATE_RECIPE_ROUTE)
+    navigate(CreateRecipe)
 }

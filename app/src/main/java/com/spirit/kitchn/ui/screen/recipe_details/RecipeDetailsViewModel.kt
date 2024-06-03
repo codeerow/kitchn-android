@@ -1,16 +1,16 @@
-package com.spirit.kitchn.ui.screen.recipe_description
+package com.spirit.kitchn.ui.screen.recipe_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spirit.kitchn.core.recipe.DeleteRecipeUseCase
 import com.spirit.kitchn.core.recipe.GetRecipeDescriptionUseCase
 import com.spirit.kitchn.core.recipe.model.RecipeDTO
-import com.spirit.kitchn.ui.screen.recipe_description.model.StepItemVO
+import com.spirit.kitchn.ui.component.item.recipe_step.StepItemVO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class RecipeDescriptionViewModel(
+class RecipeDetailsViewModel(
     private val recipeIdArg: String,
     private val deleteRecipeUseCase: DeleteRecipeUseCase,
     getRecipeDescriptionUseCase: GetRecipeDescriptionUseCase,

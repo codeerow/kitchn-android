@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.screen.recipe_description
+package com.spirit.kitchn.ui.screen.recipe_details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,14 +31,15 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.spirit.kitchn.R
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.screen.recipe_description.model.StepItemVO
+import com.spirit.kitchn.ui.component.item.recipe_step.RecipeStepItem
+import com.spirit.kitchn.ui.component.item.recipe_step.StepItemVO
 import com.spirit.kitchn.ui.theme.KTheme
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeDescriptionScreen(
-    state: RecipeDescriptionViewModel.State,
+fun RecipeDetailsScreen(
+    state: RecipeDetailsViewModel.State,
     onDeleteClicked: () -> Unit,
     isPreview: Boolean = false,
 ) {
@@ -54,7 +55,7 @@ fun RecipeDescriptionScreen(
                 .fillMaxSize(),
         ) {
             when (state) {
-                RecipeDescriptionViewModel.State.Loading -> Box(
+                RecipeDetailsViewModel.State.Loading -> Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxSize(),
@@ -62,7 +63,7 @@ fun RecipeDescriptionScreen(
                     CircularProgressIndicator()
                 }
 
-                is RecipeDescriptionViewModel.State.Content -> {
+                is RecipeDetailsViewModel.State.Content -> {
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -140,15 +141,10 @@ private fun StepsSection(
         )
     } else {
         items.forEachIndexed { index, step ->
-            Text(
-                text = "${index.plus(1)}. ${step.description}",
-                modifier = Modifier.padding(horizontal = 16.dp),
+            RecipeStepItem(
+                index = index,
+                step = step,
             )
-            Text(
-                text = "Ingredients: ${step.ingredients}",
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -200,8 +196,8 @@ private fun DeleteButton(
 @Composable
 private fun RecipeDescriptionScreenPreview_loading() {
     KTheme {
-        RecipeDescriptionScreen(
-            state = RecipeDescriptionViewModel.State.Loading,
+        RecipeDetailsScreen(
+            state = RecipeDetailsViewModel.State.Loading,
             onDeleteClicked = {},
             isPreview = true,
         )
@@ -212,8 +208,8 @@ private fun RecipeDescriptionScreenPreview_loading() {
 @Composable
 private fun RecipeDescriptionScreenPreview() {
     KTheme {
-        RecipeDescriptionScreen(
-            state = RecipeDescriptionViewModel.State.Content(
+        RecipeDetailsScreen(
+            state = RecipeDetailsViewModel.State.Content(
                 title = "Name",
                 description = "Description",
                 headerImageUrl = null,
