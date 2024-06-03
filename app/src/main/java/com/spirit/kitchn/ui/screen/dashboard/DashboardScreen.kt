@@ -1,6 +1,8 @@
 package com.spirit.kitchn.ui.screen.dashboard
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,11 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.CaloriesSection
 import com.spirit.kitchn.ui.component.KButton
+import com.spirit.kitchn.ui.component.StreakSection
 import com.spirit.kitchn.ui.theme.KTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(
+    diet: DietVO?,
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -39,25 +44,60 @@ fun DashboardScreen() {
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CaloriesSection()
-            Spacer(modifier = Modifier.weight(1f))
-            AddProductButton(
-                onClick = {},
-            )
+            StreakSection()
             Spacer(modifier = Modifier.height(16.dp))
+
+            CaloriesSection()
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (diet == null) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .testTag("textDiet"),
+                        text = "You have no diet yet"
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                CreateDietButton(
+                    onClick = {}
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            } else {
+                Row {
+
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun AddProductButton(onClick: () -> Unit) {
+private fun ShowShoppingListButton(onClick: () -> Unit) {
     KButton(
         onClick = onClick,
         modifier = Modifier
-            .testTag("buttonAddProduct")
-            .padding(horizontal = 16.dp)
+            .testTag("buttonShowShoppingList")
             .fillMaxWidth(),
-        label = "Shopping list"
+        label = "Shopping list",
+    )
+}
+
+@Composable
+private fun CreateDietButton(onClick: () -> Unit) {
+    KButton(
+        onClick = onClick,
+        modifier = Modifier
+            .testTag("buttonCreateDiet")
+            .fillMaxWidth(),
+        label = "Create Diet",
     )
 }
 
@@ -65,6 +105,78 @@ private fun AddProductButton(onClick: () -> Unit) {
 @Composable
 private fun DashboardScreenPreview() {
     KTheme {
-        DashboardScreen()
+        DashboardScreen(
+            diet = DietVO(
+                passedMeals = listOf(
+                    MealVO(
+                        name = "Meal 1",
+                        calories = 100,
+                        recipeId = "1",
+                        previewImage = "1",
+                        state = MealVO.State.EATEN,
+                    ),
+                    MealVO(
+                        name = "Meal 2",
+                        calories = 100,
+                        recipeId = "1",
+                        previewImage = "1",
+                        state = MealVO.State.NOT_EATEN,
+                    ),
+                ),
+                focusedMeal = MealVO(
+                    name = "Meal 3",
+                    calories = 200,
+                    recipeId = "1",
+                    previewImage = "1",
+                    state = MealVO.State.UNDEFINED,
+                ),
+                nextMeals = listOf(
+                    MealVO(
+                        name = "Meal 4",
+                        calories = 300,
+                        recipeId = "1",
+                        previewImage = "1",
+                        state = MealVO.State.UNDEFINED,
+                    ),
+                    MealVO(
+                        name = "Meal 5",
+                        calories = 100,
+                        recipeId = "1",
+                        previewImage = "1",
+                        state = MealVO.State.UNDEFINED,
+                    ),
+                ),
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun DashboardScreenPreview_withoutDiet() {
+    KTheme {
+        DashboardScreen(
+            diet = null
+        )
+    }
+}
+
+data class DietVO(
+    val passedMeals: List<MealVO>,
+    val focusedMeal: MealVO,
+    val nextMeals: List<MealVO>,
+)
+
+data class MealVO(
+    val recipeId: String,
+    val previewImage: String,
+    val name: String,
+    val calories: Int,
+    val state: State,
+) {
+    enum class State {
+        UNDEFINED,
+        EATEN,
+        NOT_EATEN,
     }
 }

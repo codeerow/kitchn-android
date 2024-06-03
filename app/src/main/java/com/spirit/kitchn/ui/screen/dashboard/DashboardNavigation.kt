@@ -10,6 +10,8 @@ object Dashboard
 
 fun NavGraphBuilder.dashboardScreen() {
     composable<Dashboard> {
-        DashboardScreen()
+        DashboardScreen(
+            diet = null,
+        )
     }
 }
