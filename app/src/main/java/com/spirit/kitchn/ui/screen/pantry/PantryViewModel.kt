@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.screen.home
+package com.spirit.kitchn.ui.screen.pantry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

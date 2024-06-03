@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.screen.home
+package com.spirit.kitchn.ui.screen.pantry
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue

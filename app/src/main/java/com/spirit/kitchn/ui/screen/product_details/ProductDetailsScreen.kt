@@ -22,17 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.spirit.kitchn.R
-import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.item.recipe_step.RecipeStepItem
-import com.spirit.kitchn.ui.component.item.recipe_step.StepItemVO
 import com.spirit.kitchn.ui.theme.KTheme
 
 
@@ -89,55 +84,6 @@ fun ProductDetailsScreen(
     }
 }
 
-
-@Composable
-private fun IngredientsSection(
-    items: List<String>,
-) {
-    Text(
-        text = "Ingredients",
-        fontSize = 20.sp,
-        modifier = Modifier.padding(horizontal = 16.dp),
-    )
-    if (items.isEmpty()) {
-        Text(
-            text = "This recipe has no ingredients",
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
-    } else {
-        items.forEach {
-            Text(
-                text = it,
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-        }
-    }
-}
-
-@Composable
-private fun StepsSection(
-    items: List<StepItemVO>,
-) {
-    Text(
-        text = "Steps",
-        fontSize = 20.sp,
-        modifier = Modifier.padding(horizontal = 16.dp),
-    )
-    if (items.isEmpty()) {
-        Text(
-            text = "This recipe has no steps",
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
-    } else {
-        items.forEachIndexed { index, step ->
-            RecipeStepItem(
-                index = index,
-                step = step,
-            )
-        }
-    }
-}
-
 @Composable
 private fun HeaderImage(
     imageUrl: String?,
@@ -166,24 +112,10 @@ private fun HeaderImage(
     }
 }
 
-@Composable
-private fun DeleteButton(
-    onDeleteClicked: () -> Unit,
-) {
-    KButton(
-        onClick = onDeleteClicked,
-        modifier = Modifier
-            .testTag("buttonDelete")
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
-        label = "Delete"
-    )
-}
-
 
 @Preview
 @Composable
-private fun RecipeDescriptionScreenPreview_loading() {
+private fun ProductDetailsScreenPreview_loading() {
     KTheme {
         ProductDetailsScreen(
             state = ProductDetailsViewModel.State.Loading,
@@ -194,7 +126,7 @@ private fun RecipeDescriptionScreenPreview_loading() {
 
 @Preview
 @Composable
-private fun RecipeDescriptionScreenPreview() {
+private fun ProductDetailsScreenPreview() {
     KTheme {
         ProductDetailsScreen(
             state = ProductDetailsViewModel.State.Content(

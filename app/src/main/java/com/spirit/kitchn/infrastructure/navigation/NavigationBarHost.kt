@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cookie
+import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.FoodBank
 import androidx.compose.ui.Alignment
@@ -21,11 +21,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.spirit.kitchn.ui.component.BottomNavigationBar
 import com.spirit.kitchn.ui.screen.add_product.navigateToAddProductScreen
-import com.spirit.kitchn.ui.screen.cooking.Cooking
-import com.spirit.kitchn.ui.screen.cooking.cookingScreen
+import com.spirit.kitchn.ui.screen.dashboard.Dashboard
+import com.spirit.kitchn.ui.screen.dashboard.dashboardScreen
 import com.spirit.kitchn.ui.screen.error.navigateToError
-import com.spirit.kitchn.ui.screen.home.Pantry
-import com.spirit.kitchn.ui.screen.home.pantryScreen
+import com.spirit.kitchn.ui.screen.pantry.Pantry
+import com.spirit.kitchn.ui.screen.pantry.pantryScreen
 import com.spirit.kitchn.ui.screen.product_details.navigateToProductDetails
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.navigateToCreateRecipe
 import com.spirit.kitchn.ui.screen.recipe_details.navigateToRecipeDetails
@@ -37,7 +37,7 @@ import kotlinx.serialization.Serializable
 object NavigationBarHost
 
 enum class BottomNavItem(val route: Any, val icon: ImageVector, val label: String) {
-    COOKING(Cooking, Icons.Default.Cookie, "Cooking"),
+    DASHBOARD(Dashboard, Icons.Default.Dashboard, "Dashboard"),
     PANTRY(Pantry, Icons.Default.FoodBank, "Pantry"),
     RECIPES(Recipes, Icons.Default.Fastfood, "Recipes"),
 }
@@ -50,7 +50,7 @@ fun NavGraphBuilder.navigationBarHost(rootController: NavController) {
         Column(modifier = Modifier.fillMaxSize()) {
             NavHost(
                 navController = controller,
-                startDestination = Cooking,
+                startDestination = BottomNavItem.entries.first().route,
                 enterTransition = { screenSlideIn() },
                 exitTransition = { screenFadeOut() },
                 popEnterTransition = { screenFadeIn() },
@@ -70,7 +70,7 @@ fun NavGraphBuilder.navigationBarHost(rootController: NavController) {
                     onAddRecipeClicked = rootController::navigateToCreateRecipe,
                     onRecipeItemClicked = rootController::navigateToRecipeDetails,
                 )
-                cookingScreen()
+                dashboardScreen()
             }
 
             Box(

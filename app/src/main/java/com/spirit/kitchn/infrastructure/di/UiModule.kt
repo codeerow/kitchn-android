@@ -1,7 +1,7 @@
 package com.spirit.kitchn.infrastructure.di
 
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
-import com.spirit.kitchn.ui.screen.home.PantryViewModel
+import com.spirit.kitchn.ui.screen.pantry.PantryViewModel
 import com.spirit.kitchn.ui.screen.product_details.ProductDetailsViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel

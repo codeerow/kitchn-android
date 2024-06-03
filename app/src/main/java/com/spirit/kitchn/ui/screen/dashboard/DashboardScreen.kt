@@ -1,4 +1,4 @@
-package com.spirit.kitchn.ui.screen.error
+package com.spirit.kitchn.ui.screen.dashboard
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,50 +18,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.spirit.kitchn.ui.component.CaloriesSection
 import com.spirit.kitchn.ui.component.KButton
 import com.spirit.kitchn.ui.theme.KTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ErrorScreen(
-    title: String,
-    onBackClick: () -> Unit,
-) {
+fun DashboardScreen() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopAppBar(title = { Text(title) })
-        }
+            TopAppBar(title = { Text("Dashboard") })
+        },
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
+            CaloriesSection()
             Spacer(modifier = Modifier.weight(1f))
-            KButton(
-                onClick = onBackClick,
-                modifier = Modifier
-                    .testTag("buttonAddProduct")
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                label = "Back"
+            AddProductButton(
+                onClick = {},
             )
-            Spacer(modifier = Modifier.height(26.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
 
+@Composable
+private fun AddProductButton(onClick: () -> Unit) {
+    KButton(
+        onClick = onClick,
+        modifier = Modifier
+            .testTag("buttonAddProduct")
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        label = "Shopping list"
+    )
+}
+
 @Preview
 @Composable
-private fun ErrorScreenPreview() {
+private fun DashboardScreenPreview() {
     KTheme {
-        ErrorScreen(
-            title = "Error screen",
-            onBackClick = {},
-        )
+        DashboardScreen()
     }
 }

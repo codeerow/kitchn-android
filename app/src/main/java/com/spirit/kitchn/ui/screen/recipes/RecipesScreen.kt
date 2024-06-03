@@ -2,7 +2,6 @@ package com.spirit.kitchn.ui.screen.recipes
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -17,11 +16,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.spirit.kitchn.ui.component.CustomStaggeredVerticalGrid
-import com.spirit.kitchn.ui.component.KButton
 import com.spirit.kitchn.ui.component.item.recipe.RecipeItem
 import com.spirit.kitchn.ui.component.item.recipe.RecipeItemVO
 import com.spirit.kitchn.ui.theme.KTheme
@@ -89,23 +86,9 @@ private fun RecipesGrid(
     }
 }
 
-@Composable
-private fun AddRecipeButton(
-    onAddRecipeClicked: () -> Unit,
-) {
-    KButton(
-        onClick = onAddRecipeClicked,
-        modifier = Modifier
-            .testTag("buttonAddRecipe")
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
-        label = "Add Recipe"
-    )
-}
-
 @Preview
 @Composable
-private fun HomeScreenPreview() {
+private fun RecipesScreenPreview() {
     KTheme {
         RecipesScreen(
             recipes = listOf(

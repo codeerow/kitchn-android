@@ -194,7 +194,7 @@ private fun DeleteButton(
 
 @Preview
 @Composable
-private fun RecipeDescriptionScreenPreview_loading() {
+private fun RecipeDetailsScreenPreview_loading() {
     KTheme {
         RecipeDetailsScreen(
             state = RecipeDetailsViewModel.State.Loading,
@@ -206,7 +206,7 @@ private fun RecipeDescriptionScreenPreview_loading() {
 
 @Preview
 @Composable
-private fun RecipeDescriptionScreenPreview() {
+private fun RecipeDetailsScreenPreview() {
     KTheme {
         RecipeDetailsScreen(
             state = RecipeDetailsViewModel.State.Content(

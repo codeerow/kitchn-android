@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.spirit.kitchn.core.auth.repo.TokenRepo
 import com.spirit.kitchn.ui.screen.add_product.addProductScreen
+import com.spirit.kitchn.ui.screen.cooking.cookingScreen
 import com.spirit.kitchn.ui.screen.error.errorScreen
 import com.spirit.kitchn.ui.screen.product_details.productDetailsScreen
 import com.spirit.kitchn.ui.screen.recipe_creation.createRecipeGraph
@@ -53,5 +54,6 @@ internal fun NavigationGraph() {
             onCreated = { controller.popBackStack(route = NavigationBarHost, inclusive = false) },
         )
         productDetailsScreen()
+        cookingScreen()
     }
 }
