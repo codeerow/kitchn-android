@@ -14,18 +14,18 @@ object CreateRecipeGraph
 
 fun NavGraphBuilder.createRecipeGraph(
     controller: NavController,
-    onRecipeCreated: () -> Unit,
+    onCreated: () -> Unit,
 ) {
     navigation<CreateRecipeGraph>(
         startDestination = CreateRecipe,
     ) {
         createRecipeScreen(
-            onRecipeCreated = onRecipeCreated,
+            onRecipeCreated = onCreated,
             onAddRecipeStep = controller::navigateToAddRecipeStepScreen,
         )
         addStepRecipeScreen(
             onAddRecipeStep = controller::navigateToAddRecipeStepScreen,
-            onRecipeCreated = onRecipeCreated,
+            onRecipeCreated = onCreated,
         )
     }
 }

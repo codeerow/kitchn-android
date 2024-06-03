@@ -3,7 +3,7 @@ package com.spirit.kitchn.ui.screen.recipe_details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spirit.kitchn.core.recipe.DeleteRecipeUseCase
-import com.spirit.kitchn.core.recipe.GetRecipeDescriptionUseCase
+import com.spirit.kitchn.core.recipe.GetRecipeDetailsUseCase
 import com.spirit.kitchn.core.recipe.model.RecipeDTO
 import com.spirit.kitchn.ui.component.item.recipe_step.StepItemVO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 class RecipeDetailsViewModel(
     private val recipeIdArg: String,
     private val deleteRecipeUseCase: DeleteRecipeUseCase,
-    getRecipeDescriptionUseCase: GetRecipeDescriptionUseCase,
-    private val onRecipeDeleted: () -> Unit,
+    getRecipeDetailsUseCase: GetRecipeDetailsUseCase,
+    private val onDeleted: () -> Unit,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<State>(State.Loading)
@@ -22,7 +22,7 @@ class RecipeDetailsViewModel(
 
     init {
         viewModelScope.launch {
-            val content = getRecipeDescriptionUseCase.execute(recipeIdArg).toContent()
+            val content = getRecipeDetailsUseCase.execute(recipeIdArg).toContent()
             _state.emit(content)
         }
     }
@@ -30,7 +30,7 @@ class RecipeDetailsViewModel(
     fun deleteRecipe() {
         viewModelScope.launch {
             deleteRecipeUseCase.execute(recipeId = recipeIdArg)
-            onRecipeDeleted()
+            onDeleted()
         }
     }
 

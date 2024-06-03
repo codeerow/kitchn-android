@@ -26,6 +26,7 @@ import com.spirit.kitchn.ui.screen.cooking.cookingScreen
 import com.spirit.kitchn.ui.screen.error.navigateToError
 import com.spirit.kitchn.ui.screen.home.Pantry
 import com.spirit.kitchn.ui.screen.home.pantryScreen
+import com.spirit.kitchn.ui.screen.product_details.navigateToProductDetails
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.navigateToCreateRecipe
 import com.spirit.kitchn.ui.screen.recipe_details.navigateToRecipeDetails
 import com.spirit.kitchn.ui.screen.recipes.Recipes
@@ -62,7 +63,7 @@ fun NavGraphBuilder.navigationBarHost(rootController: NavController) {
 
                 pantryScreen(
                     onAddProductClicked = rootController::navigateToAddProductScreen,
-                    onProductClicked = rootController::navigateToAddProductScreen,
+                    onProductClicked = rootController::navigateToProductDetails,
                     onError = rootController::navigateToError,
                 )
                 recipesScreen(

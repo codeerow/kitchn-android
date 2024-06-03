@@ -2,6 +2,7 @@ package com.spirit.kitchn.infrastructure.di
 
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
 import com.spirit.kitchn.ui.screen.home.PantryViewModel
+import com.spirit.kitchn.ui.screen.product_details.ProductDetailsViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.create_recipe.CreateRecipeViewModel
 import com.spirit.kitchn.ui.screen.recipe_details.RecipeDetailsViewModel
@@ -32,11 +33,11 @@ val uiModule = module {
         )
     }
 
-    viewModel { (barcode: String, onProductAdded: () -> Unit) ->
+    viewModel { (barcode: String, onAdded: () -> Unit) ->
         AddProductViewModel(
             barcode = barcode,
             addProductManuallyUseCase = get(),
-            onProductAdded = onProductAdded,
+            onAdded = onAdded,
         )
     }
 
@@ -69,12 +70,19 @@ val uiModule = module {
         )
     }
 
-    viewModel { (recipeIdArg: String, onRecipeDeleted: () -> Unit) ->
+    viewModel { (recipeIdArg: String, onDeleted: () -> Unit) ->
         RecipeDetailsViewModel(
             recipeIdArg = recipeIdArg,
-            getRecipeDescriptionUseCase = get(),
+            getRecipeDetailsUseCase = get(),
             deleteRecipeUseCase = get(),
-            onRecipeDeleted = onRecipeDeleted,
+            onDeleted = onDeleted,
+        )
+    }
+
+    viewModel { (productIdArg: String) ->
+        ProductDetailsViewModel(
+            productIdArg = productIdArg,
+            getProductDetailsUseCase = get(),
         )
     }
 }

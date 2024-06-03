@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class AddProductViewModel(
     private val barcode: String,
     private val addProductManuallyUseCase: AddProductManuallyUseCase,
-    private val onProductAdded: () -> Unit,
+    private val onAdded: () -> Unit,
 ) : ViewModel() {
 
     val photos = MutableStateFlow(listOf<PhotoItem.Photo>())
@@ -38,6 +38,7 @@ class AddProductViewModel(
                 productFamily = productFamily.value
             )
             addProductManuallyUseCase.execute(request)
+            onAdded()
         }
     }
 

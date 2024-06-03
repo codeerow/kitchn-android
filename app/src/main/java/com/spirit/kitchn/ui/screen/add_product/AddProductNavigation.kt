@@ -14,12 +14,12 @@ import org.koin.core.parameter.parametersOf
 data class AddProductManually(val barcode: String)
 
 fun NavGraphBuilder.addProductScreen(
-    onProductAdded: () -> Unit,
+    onAdded: () -> Unit,
 ) {
     composable<AddProductManually> { backStackEntry ->
         val addProductManually: AddProductManually = backStackEntry.toRoute()
         val viewModel: AddProductViewModel =
-            koinNavViewModel { parametersOf(addProductManually.barcode, onProductAdded) }
+            koinNavViewModel { parametersOf(addProductManually.barcode, onAdded) }
 
         val name by viewModel.name.collectAsState()
         val productFamily by viewModel.productFamily.collectAsState()

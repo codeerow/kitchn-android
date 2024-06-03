@@ -14,13 +14,13 @@ import org.koin.core.parameter.parametersOf
 data class RecipeDetails(val recipeId: String)
 
 fun NavGraphBuilder.recipeDetailsScreen(
-    onRecipeDeleted: () -> Unit,
+    onDeleted: () -> Unit,
 ) {
     composable<RecipeDetails> { backStackEntry ->
         val recipeDetails: RecipeDetails = backStackEntry.toRoute()
 
         val viewModel: RecipeDetailsViewModel = koinNavViewModel {
-            parametersOf(recipeDetails.recipeId, onRecipeDeleted)
+            parametersOf(recipeDetails.recipeId, onDeleted)
         }
 
         val state by viewModel.state.collectAsState()

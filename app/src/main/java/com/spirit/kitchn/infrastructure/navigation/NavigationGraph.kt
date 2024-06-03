@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.spirit.kitchn.core.auth.repo.TokenRepo
 import com.spirit.kitchn.ui.screen.add_product.addProductScreen
 import com.spirit.kitchn.ui.screen.error.errorScreen
+import com.spirit.kitchn.ui.screen.product_details.productDetailsScreen
 import com.spirit.kitchn.ui.screen.recipe_creation.createRecipeGraph
 import com.spirit.kitchn.ui.screen.recipe_details.recipeDetailsScreen
 import com.spirit.kitchn.ui.screen.welcome.Welcome
@@ -39,17 +40,18 @@ internal fun NavigationGraph() {
             rootController = controller,
         )
         addProductScreen(
-            onProductAdded = { controller.popBackStack(NavigationBarHost, inclusive = false) },
+            onAdded = { controller.popBackStack(NavigationBarHost, inclusive = false) },
         )
         errorScreen(
             onBackClicked = controller::navigateUp,
         )
         recipeDetailsScreen(
-            onRecipeDeleted = { controller.popBackStack(route = NavigationBarHost, inclusive = false) },
+            onDeleted = { controller.popBackStack(route = NavigationBarHost, inclusive = false) },
         )
         createRecipeGraph(
             controller = controller,
-            onRecipeCreated = { controller.popBackStack(route = NavigationBarHost, inclusive = false) },
+            onCreated = { controller.popBackStack(route = NavigationBarHost, inclusive = false) },
         )
+        productDetailsScreen()
     }
 }
