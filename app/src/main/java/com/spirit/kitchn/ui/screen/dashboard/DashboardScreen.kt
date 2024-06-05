@@ -29,6 +29,7 @@ import com.spirit.kitchn.ui.theme.KTheme
 @Composable
 fun DashboardScreen(
     diet: DietVO?,
+    onCreateDietClicked: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -51,25 +52,10 @@ fun DashboardScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             if (diet == null) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .testTag("textDiet"),
-                        text = "You have no diet yet"
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-                CreateDietButton(
-                    onClick = {}
+                ThereIsNoDietSection(
+                    modifier = Modifier.weight(1f),
+                    onCreateDietClicked = onCreateDietClicked,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
             } else {
                 Row {
 
@@ -77,6 +63,31 @@ fun DashboardScreen(
             }
         }
     }
+}
+
+@Composable
+private fun ThereIsNoDietSection(
+    modifier: Modifier = Modifier,
+    onCreateDietClicked: () -> Unit,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        Text(
+            modifier = Modifier
+                .testTag("textDiet"),
+            text = "You have no diet yet"
+        )
+    }
+    Spacer(modifier = Modifier.height(16.dp))
+
+    CreateDietButton(
+        onClick = onCreateDietClicked,
+    )
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -147,6 +158,7 @@ private fun DashboardScreenPreview() {
                     ),
                 ),
             ),
+            onCreateDietClicked = {},
         )
     }
 }
@@ -156,7 +168,8 @@ private fun DashboardScreenPreview() {
 private fun DashboardScreenPreview_withoutDiet() {
     KTheme {
         DashboardScreen(
-            diet = null
+            diet = null,
+            onCreateDietClicked = {},
         )
     }
 }
