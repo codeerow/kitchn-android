@@ -3,11 +3,12 @@ package com.spirit.kitchn.infrastructure.di.core
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.spirit.kitchn.core.user.GetAvailableRecipesUseCase
 import com.spirit.kitchn.core.user.personal_info.GetUserInfoUseCase
-import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
+import com.spirit.kitchn.core.user.product.datasource.UserProductDataSource
 import com.spirit.kitchn.core.user.product.usecases.DeleteProductUseCase
 import com.spirit.kitchn.core.user.product.usecases.GetMyProductsUseCase
-import com.spirit.kitchn.core.user.product.datasource.UserProductDataSource
+import com.spirit.kitchn.core.user.product.usecases.add_product.AddProductUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -41,19 +42,25 @@ val userModule = module {
 
         UserProductDataSource(
             httpClient = get(),
-            coroutineScope = coroutineScope
+            coroutineScope = coroutineScope,
         )
     }
 
     factory {
         GetMyProductsUseCase(
-            dataSource = get()
+            dataSource = get(),
         )
     }
 
     factory {
         GetUserInfoUseCase(
-            httpClient = get()
+            httpClient = get(),
+        )
+    }
+
+    factory {
+        GetAvailableRecipesUseCase(
+            httpClient = get(),
         )
     }
 

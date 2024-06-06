@@ -1,15 +1,15 @@
 package com.spirit.kitchn.ui.screen.dashboard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,19 +17,24 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.spirit.kitchn.ui.component.CaloriesSection
+import com.spirit.kitchn.R
 import com.spirit.kitchn.ui.component.KButton
-import com.spirit.kitchn.ui.component.StreakSection
+import com.spirit.kitchn.ui.component.item.recipe.RecipeItemV2
+import com.spirit.kitchn.ui.component.item.recipe.RecipeItemVO
 import com.spirit.kitchn.ui.theme.KTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
+    availableRecipes: List<RecipeItemVO>,
     diet: DietVO?,
-    onCreateDietClicked: () -> Unit,
+    onCreateMealPlanClicked: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -41,53 +46,85 @@ fun DashboardScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            StreakSection()
-            Spacer(modifier = Modifier.height(16.dp))
-
-            CaloriesSection()
-            Spacer(modifier = Modifier.height(16.dp))
-
             if (diet == null) {
-                ThereIsNoDietSection(
-                    modifier = Modifier.weight(1f),
-                    onCreateDietClicked = onCreateDietClicked,
+                ThereIsNoPlanSection(
+                    modifier = Modifier.fillMaxSize(),
+                    availableRecipes = availableRecipes,
+                    onCreateMealPlanClicked = onCreateMealPlanClicked,
                 )
-            } else {
-                Row {
-
-                }
             }
         }
     }
 }
 
 @Composable
-private fun ThereIsNoDietSection(
+private fun ThereIsNoPlanSection(
+    availableRecipes: List<RecipeItemVO>,
     modifier: Modifier = Modifier,
-    onCreateDietClicked: () -> Unit,
+    onCreateMealPlanClicked: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxSize()
     ) {
+        Image(
+            modifier = Modifier.height(300.dp),
+            painter = painterResource(id = R.drawable.pngegg),
+            contentDescription = "images",
+            contentScale = ContentScale.FillHeight,
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         Text(
+            textAlign = TextAlign.Center,
             modifier = Modifier
                 .testTag("textDiet"),
-            text = "You have no diet yet"
+            text = "There is no plan for today...\nPlease, eat some."
         )
-    }
-    Spacer(modifier = Modifier.height(16.dp))
 
-    CreateDietButton(
-        onClick = onCreateDietClicked,
-    )
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+
+        AvailableRecipesGrid(
+            items = availableRecipes,
+            modifier = Modifier.height(220.dp),
+        )
+        Text(
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .testTag("textDiet"),
+            text = "or"
+        )
+        CreatePlanButton(
+            onClick = onCreateMealPlanClicked,
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+
+@Composable
+fun AvailableRecipesGrid(
+    items: List<RecipeItemVO>,
+    modifier: Modifier = Modifier,
+) {
+    val pagerState = rememberPagerState(pageCount = { items.count() })
+    HorizontalPager(
+        modifier = modifier,
+        state = pagerState,
+    ) { page ->
+        Column(modifier = Modifier.fillMaxSize()) {
+            RecipeItemV2(
+                item = items[page],
+                onItemClicked = {},
+            )
+        }
+    }
 }
 
 @Composable
@@ -102,13 +139,16 @@ private fun ShowShoppingListButton(onClick: () -> Unit) {
 }
 
 @Composable
-private fun CreateDietButton(onClick: () -> Unit) {
+private fun CreatePlanButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     KButton(
         onClick = onClick,
-        modifier = Modifier
-            .testTag("buttonCreateDiet")
+        modifier = modifier
+            .testTag("buttonCreateMealPlan")
             .fillMaxWidth(),
-        label = "Create Diet",
+        label = "Plan your meal",
     )
 }
 
@@ -158,7 +198,8 @@ private fun DashboardScreenPreview() {
                     ),
                 ),
             ),
-            onCreateDietClicked = {},
+            onCreateMealPlanClicked = {},
+            availableRecipes = listOf(),
         )
     }
 }
@@ -169,7 +210,14 @@ private fun DashboardScreenPreview_withoutDiet() {
     KTheme {
         DashboardScreen(
             diet = null,
-            onCreateDietClicked = {},
+            availableRecipes = listOf(
+                RecipeItemVO(
+                    name = "Meal 1",
+                    id = "1",
+                    imageUrl = null,
+                ),
+            ),
+            onCreateMealPlanClicked = {},
         )
     }
 }

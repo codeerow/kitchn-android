@@ -1,6 +1,7 @@
 package com.spirit.kitchn.infrastructure.di
 
 import com.spirit.kitchn.ui.screen.add_product.AddProductViewModel
+import com.spirit.kitchn.ui.screen.dashboard.DashboardViewModel
 import com.spirit.kitchn.ui.screen.pantry.PantryViewModel
 import com.spirit.kitchn.ui.screen.product_details.ProductDetailsViewModel
 import com.spirit.kitchn.ui.screen.recipe_creation.add_recipe_step.AddRecipeStepViewModel
@@ -38,6 +39,12 @@ val uiModule = module {
             barcode = barcode,
             addProductManuallyUseCase = get(),
             onAdded = onAdded,
+        )
+    }
+
+    viewModel {
+        DashboardViewModel(
+            getAllRecipesUseCase = get(),
         )
     }
 
